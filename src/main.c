@@ -3,7 +3,7 @@
 int main()
 {	
 	system("chcp 1251");
-	system("pause");
+	system("cls");
 	print_zast();
 	system("pause");
 

@@ -20,7 +20,6 @@ int calculateMenuSize()
 
 int menu_draw_and_coise()
 {
-	printf("1");
 	const int MENU_SIZE = calculateMenuSize();
 	int active_position = 1;
 	char input = '1';
