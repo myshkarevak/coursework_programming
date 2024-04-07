@@ -1,4 +1,4 @@
-#include "functions.h"
+#include "./headers/functions.h"
 
 void input(int *N, float *U, float *a_in, float *a1_out,
 	float *a2_out, float *a3_out, float *a4_out,
@@ -27,8 +27,7 @@ void save_data(int N, float U, float a_in, float a1_out,
 	float b4_out, float U_in1, float U_in2, float U_in3)
 {
 
-	FILE* data;
-	data = fopen("data.txt", "w");
+	FILE* data = fopen("src\\data\\data.txt", "w");
 
 	fprintf(data, "N = %d\n", N);
 	fprintf(data, "U = %f\n", U);
@@ -53,9 +52,9 @@ void load_data(int* N, float* U, float* a_in, float* a1_out,
 	float* b1_out, float* b2_out, float* b3_out,
 	float* b4_out, float* U_in1, float* U_in2, float* U_in3)
 {
-	FILE* data = fopen("data.txt", "a");
+	FILE* data = fopen("src\\data\\data.txt", "a");
 	fclose(data);
-	data = fopen("data.txt", "r");
+	data = fopen("src\\data\\data.txt", "r");
 
 	fscanf(data, "N = %d\n", N);
 	fscanf(data, "U = %f\n", U);
@@ -153,9 +152,9 @@ void print_to_file(int N, float time[], float U_in[], float U_out[])
 {
 	FILE* arr_t, * arr_Uin, * arr_Uout, * data;
 
-	arr_t = fopen("arr_t.txt", "w");
-	arr_Uin = fopen("arr_Uin.txt", "w");
-	arr_Uout = fopen("arr_Uout.txt", "w");
+	arr_t = fopen("src\\data\\arr_t.txt", "w");
+	arr_Uin = fopen("src\\data\\arr_Uin.txt", "w");
+	arr_Uout = fopen("src\\data\\arr_Uout.txt", "w");
 	for (int i = 0; i < N; i++)
 	{
 		fprintf(arr_t, "\n %6.3f", time[i]);

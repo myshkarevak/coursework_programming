@@ -9,7 +9,7 @@
 
 void print_zast();
 int menu_draw_and_coise();
-void draw(int active_position);
+void draw(int active_position, int size);
 
 void input(int* N, float* U, float* a_in, float* a1_out,
 	float* a2_out, float* a3_out, float* a4_out,

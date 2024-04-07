@@ -1,8 +1,9 @@
-#include "functions.h"
+#include "./headers/functions.h"
 
 int main()
 {	
 	system("chcp 1251");
+	system("cls");
 	print_zast();
 	system("pause");
 
