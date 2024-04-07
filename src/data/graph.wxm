@@ -6,9 +6,9 @@
 
 
 /* [wxMaxima: input   start ] */
- t:read_list("/Users/serbi/source/repos/kurs2/kurs2/arr_t.txt");
- Uvx:read_list("/Users/serbi/source/repos/kurs2/kurs2/arr_Uin.txt");
- Uvix:read_list("/Users/serbi/source/repos/kurs2/kurs2/arr_Uout.txt");
+ t:read_list("./arr_t.txt");
+ Uvx:read_list("./arr_Uin.txt");
+ Uvix:read_list("./arr_Uout.txt");
  wxplot2d([['discrete, t, Uvx]],[gnuplot_preamble, "set grid;"]);
  wxplot2d([['discrete, t, Uvix]],[gnuplot_preamble, "set grid;"]); 
 /* [wxMaxima: input end   ] */
