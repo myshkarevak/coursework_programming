@@ -1,63 +1,39 @@
 #include "./headers/functions.h"
 
-const char* menuItems[] = 
-	{
-		"1. Input data from console\n",
-		"2. Save data to file\n",
-		"3. Load data from file\n",
-		"4. Open WXMaxima calculation\n",
-		"5. Save calculations to files\n",
-		"6. Print calculations\n", 
-		"7. Calculate and print U_in duration with accuracy\n",
-		"8. Calculate and print U_out duration with accuracy\n",
-		"9. Exit\n",
-	};
+#define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
 
-int calculateMenuSize()
+const int ARROW_DOWN = 80;
+const int ARROW_UP = 72;
+const int FIRST_ACTIVE_INDEX = 1;
+const char ENTER_KEY = 13;
+
+void showTitleScreen()
 {
-	return (&menuItems)[1] - menuItems;
-}
-
-int menu_draw_and_coise()
-{
-	const int MENU_SIZE = calculateMenuSize();
-	int active_position = 1;
-	char input = '1';
-
-	while (input != 13)
+	FILE* titleFile = fopen("src\\data\\zast.txt", "r"); 
+	char symbol;
+	while (!feof(titleFile))                        
 	{
-		system("cls");
-		draw(active_position, MENU_SIZE);
-		input = _getch();
-	
-			if (input == 80)
-			{
-				active_position++;
-
-				if (active_position == MENU_SIZE + 1)
-				{
-					active_position = 1;
-				}
-			}
-			else if (input == 72)
-			{
-				active_position--;
-
-				if (active_position == 0)
-				{
-					active_position = MENU_SIZE;
-				}
-			}
+		fscanf(titleFile, "%c", &symbol);             
+		printf("%c", symbol);
 	}
-	system("cls");
-	return active_position;
+	printf("\n");
+	fclose(titleFile);
 }
 
-void draw(int active_position, int size)
+int calculateMenuSize(const char* menuItems[])
 {
-	for (int i = 0; i < size; i++)
+    int index = 0;
+	while(menuItems[index] != NULL) {
+		index++;
+	}
+	return index;
+}
+
+void drawMenu(const char* menuItems[], int menuSize, int currentMenuItemIndex)
+{
+	for (int i = 0; i < menuSize; i++)
 	{
-		if(active_position == i + 1)
+		if(currentMenuItemIndex == i + 1)
 		{
 			printf("->");
 		} 
@@ -69,15 +45,40 @@ void draw(int active_position, int size)
 	}	
 }
 
-void print_zast()
+int getUserChoiceFromMenu(const char* menuItems[])
 {
-	FILE* f = fopen("src\\data\\zast.txt", "r"); 
-	char ch;
-	while (!feof(f))                        
+	const int MENU_SIZE = calculateMenuSize(menuItems);
+	const int LAST_ACTIVE_INDEX = MENU_SIZE;
+	int currentMenuItemIndex = FIRST_ACTIVE_INDEX;
+	char pressedKey = '1';
+
+	while (pressedKey != 13)
 	{
-		fscanf(f, "%c", &ch);             
-		printf("%c", ch);
+		system("cls");
+		drawMenu(menuItems, MENU_SIZE, currentMenuItemIndex);
+		pressedKey = _getch();
+
+		switch (pressedKey)
+		{
+		case ARROW_DOWN: {
+			currentMenuItemIndex++;
+			if (currentMenuItemIndex == MENU_SIZE + 1)
+			{
+				currentMenuItemIndex = FIRST_ACTIVE_INDEX;
+			}
+			break;
+		}
+		case ARROW_UP: {
+			currentMenuItemIndex--;
+			if (currentMenuItemIndex == 0)
+			{
+				currentMenuItemIndex = LAST_ACTIVE_INDEX;
+			}
+		}
+		default:
+			break;
+		}
 	}
-	printf("\n");
-	fclose(f);
+	system("cls");
+	return currentMenuItemIndex;
 }

@@ -7,9 +7,8 @@
 #include <conio.h>
 #define PI 3.1416
 
-void print_zast();
-int menu_draw_and_coise();
-void draw(int active_position, int size);
+void showTitleScreen();
+int getUserChoiceFromMenu(const char* menuItems[]);
 
 void input(int* N, float* U, float* a_in, float* a1_out,
 	float* a2_out, float* a3_out, float* a4_out,
