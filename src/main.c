@@ -1,10 +1,26 @@
 #include "./headers/functions.h"
 
+const char* menuItems[] = 
+	{
+		"1. Input data from console\n",
+		"2. Save data to file\n",
+		"3. Load data from file\n",
+		"4. Print calculations\n", 
+		"5. Draw graphs\n",
+		"6. Open WXMaxima calculation\n",
+		// "7. Calculate and print U_in duration with accuracy\n",
+		// "8. Calculate and print U_out duration with accuracy\n",
+		"7. Exit\n",
+		NULL
+	};
+const int EXIT_INDEX = 7;
+
 int main()
 {	
 	system("chcp 1251");
 	system("cls");
-	print_zast();
+
+	showTitleScreen();
 	system("pause");
 
 	int N = 0;
@@ -12,13 +28,13 @@ int main()
 	float dt = 0, a_in = 0, a1_out = 0, a2_out = 0, a3_out = 0, a4_out = 0;
 	float U = 0, b1_out = 0, b2_out = 0, b3_out = 0, b4_out = 0, U_in1=0 , U_in2 =0, U_in3=0;
 	float* time = NULL, * U_in = NULL, * U_out = NULL;
-	int choise = 0;
+	int choice = 0;
 
-	while (1)
+	while (choice != EXIT_INDEX)
 	{
-		choise = menu_draw_and_coise();
+		choice = getUserChoiceFromMenu(menuItems);
 
-		switch (choise)
+		switch (choice)
 		{
 		case 1:
 			{
@@ -54,25 +70,6 @@ int main()
 			break;
 		}
 		case 4:
-		{
-			system("calculation.wxmx");
-			system("pause");
-			break;
-		}
-		case 5:
-		{
-			if (time == NULL || U_in == NULL || U_out == NULL)
-			{
-				printf("\nerror! no data to save please create that first\n");
-				system("pause");
-				break;
-			}
-			print_to_file(N, time, U_in, U_out);
-			system("graph.wxm");
-			system("pause");
-			break;
-		}
-		case 6:
 		{	
 			print_data(N, U, a_in, a1_out,
 				a2_out, a3_out, a4_out,
@@ -101,25 +98,44 @@ int main()
 			system("pause");
 			break;
 		}
+		case 5:
+		{
+			if (time == NULL || U_in == NULL || U_out == NULL)
+			{
+				printf("\nerror! no data to save please create that first\n");
+				system("pause");
+				break;
+			}
+			print_to_file(N, time, U_in, U_out);
+			system("graph.wxm");
+			system("pause");
+			break;
+		}
+		case 6:
+		{
+			system("calculation.wxmx");
+			system("pause");
+			break;
+		}
+		// case 7:
+		// {
+		// 	accurancy(N, U, a_in, a1_out,
+		// 		a2_out, a3_out, a4_out,
+		// 		b1_out, b2_out, b3_out,
+		// 		b4_out, U_in1, U_in2, U_in3, 1);
+		// 	system("pause");
+		// 	break;
+		// }
+		// case 8:
+		// {
+		// 	accurancy(N, U, a_in, a1_out,
+		// 		a2_out, a3_out, a4_out,
+		// 		b1_out, b2_out, b3_out,
+		// 		b4_out, U_in1, U_in2, U_in3, 0);
+		// 	system("pause");
+		// 	break;
+		// }
 		case 7:
-		{
-			accurancy(N, U, a_in, a1_out,
-				a2_out, a3_out, a4_out,
-				b1_out, b2_out, b3_out,
-				b4_out, U_in1, U_in2, U_in3, 1);
-			system("pause");
-			break;
-		}
-		case 8:
-		{
-			accurancy(N, U, a_in, a1_out,
-				a2_out, a3_out, a4_out,
-				b1_out, b2_out, b3_out,
-				b4_out, U_in1, U_in2, U_in3, 0);
-			system("pause");
-			break;
-		}
-		case 9:
 		{	
 			free(time);
 			free(U_in);
