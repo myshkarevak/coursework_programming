@@ -38,6 +38,24 @@ void readInitialValuesFromConsole
 	printf("Parameter U2 for U_out: "); scanf("%f", outputParameterU2);
 }
 
+void printInitialValuesToConsole
+(
+	int numberOfPoints, float inputParameterA,
+	float inputParameterB, float inputParameterC,
+ 	float outputParameterA, float outputParameterB,
+ 	float outputParameterU1, float outputParameterU2
+)
+{
+	printf("Points: %d\n", numberOfPoints);
+	printf("Parameter A for U_in: %f\n", inputParameterA);
+	printf("Parameter B for U_in: %f\n", inputParameterB);
+	printf("Parameter C for U_in: %f\n", inputParameterC);
+	printf("Parameter A for U_out: %f\n", outputParameterA);
+	printf("Parameter B for U_out: %f\n", outputParameterB);
+	printf("Parameter U1 for U_out: %f\n", outputParameterU1);
+	printf("Parameter U2 for U_out: %f\n", outputParameterU2);
+}
+
 void saveInitialDataToFile
 (
 	const char *filePath, int numberOfPoints, float inputParameterA,
@@ -127,7 +145,7 @@ void calculateUInPoints
 	}
 }
 
-void calculateUInPoints
+void calculateUOutPoints
 (
 	int numberOfPoints, float outputParameterA,
 	float outputParameterB, float outputParameterU1, 
@@ -152,52 +170,29 @@ void calculateUInPoints
 	}
 }
 
-void print_to_console(int N, float time[], float U_in[], float U_out[])
+void printCalculationToConsole
+(
+	int numberOfPoints, float timePoints[], float UInPoints[], float UOutPoints[]
+)
 {	
-	printf("   N   time      U_in       U_out");
-	for (int i = 0; i < N; i++) //     
+	printf("Point\tTime\tU_in\tU_out\n");
+
+	for (int i = 0; i < numberOfPoints; i++)     
 	{
-		printf("\n % 3d % .6f % .6f % .6f", i, time[i], U_in[i], U_out[i]);
+		printf("%d %.4f %.4f %.4f\n", i + 1, time[i], UInPoints[i], UOutPoints[i]);
 	}
 }
 
-void print_data(int N, float U, float a_in, float a1_out,
-	float a2_out, float a3_out, float a4_out,
-	float b1_out, float b2_out, float b3_out,
-	float b4_out, float U_in1, float U_in2, float U_in3)
+void exportPointsDataToFile(char *filePath, int numberOfPoints, float pointsData[])
 {
-	printf("a: %d\n", N);                 
-	printf("U: %f\n", U);  
-	printf("a1: %f\n", a_in);   
-	printf("a1: %f\n", a1_out); 
-	printf("a2: %f\n", a2_out); 
-	printf("a3: %f\n", a3_out); 
-	printf("4: %f\n", a4_out); 
-	printf("b1: %f\n", b1_out); 
-	printf("b2: %f\n", b2_out); 
-	printf("b3: %f\n", b3_out); 
-	printf("b4: %f\n", b4_out); 
-	printf("U_in1: %f\n", U_in1); 
-	printf("U_in2: %f\n", U_in2); 
-	printf("U_in3: %f\n", U_in3); 
-}
+	FILE* exportFile = fopen(filePath, "w");
 
-void print_to_file(int N, float time[], float U_in[], float U_out[])
-{
-	FILE* arr_t, * arr_UIn, * arr_UOut, * data;
-
-	arr_t = fopen("src\\data\\arr_t.txt", "w");
-	arr_UIn = fopen("src\\data\\arr_UIn.txt", "w");
-	arr_UOut = fopen("src\\data\\arr_UOut.txt", "w");
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < numberOfPoints; i++)
 	{
-		fprintf(arr_t, "\n %6.3f", time[i]);
-		fprintf(arr_UIn, "\n %6.3f", U_in[i]);         
-		fprintf(arr_UOut, "\n%6.3f", U_out[i]);
+		fprintf(exportFile, "\n %.4f", pointsData[i]);
 	}
-	fclose(arr_t);
-	fclose(arr_UIn);
-	fclose(arr_UOut);
+
+	fclose(exportFile);
 }
 
 float dlitelnost(int N, float U[], float dt, float U_imp)
