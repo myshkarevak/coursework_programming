@@ -22,13 +22,13 @@
 
 void readInitialValuesFromConsole
 (	
-	int *points, float *inputParameterA,
+	int *numberOfPoints, float *inputParameterA,
 	float *inputParameterB, float *inputParameterC,
 	float *outputParameterA, float *outputParameterB,
 	float *outputParameterU1, float *outputParameterU2
 )
 {
-	printf("Points: "); scanf("%d", points);
+	printf("Points: "); scanf("%d", numberOfPoints);
 	printf("Parameter A for U_in: ");   scanf("%f", inputParameterA);
 	printf("Parameter B for U_in: ");   scanf("%f", inputParameterB);
 	printf("Parameter C for U_in: "); scanf("%f", inputParameterC);
@@ -40,7 +40,7 @@ void readInitialValuesFromConsole
 
 void saveInitialDataToFile
 (
-	const char *filePath, int points, float inputParameterA,
+	const char *filePath, int numberOfPoints, float inputParameterA,
 	float inputParameterB, float inputParameterC,
  	float outputParameterA, float outputParameterB,
  	float outputParameterU1, float outputParameterU2
@@ -49,7 +49,7 @@ void saveInitialDataToFile
 	// FILE* data = fopen("src\\data\\data.txt", "w");
 	FILE* outputFile = fopen(filePath, "w");
 
-	fprintf(outputFile, "Points: %d\n", points);
+	fprintf(outputFile, "Points: %d\n", numberOfPoints);
 	fprintf(outputFile, "Parameter A for U_in: %f\n", inputParameterA);
 	fprintf(outputFile, "Parameter B for U_in: %f\n", inputParameterB);
 	fprintf(outputFile, "Parameter C for U_in: %f\n", inputParameterC);
@@ -63,7 +63,7 @@ void saveInitialDataToFile
 
 void loadInitialDataFromFile
 (
-	const char* filePath, int *points, float *inputParameterA,
+	const char* filePath, int *numberOfPoints, float *inputParameterA,
 	float *inputParameterB, float *inputParameterC,
 	float *outputParameterA, float *outputParameterB,
 	float *outputParameterU1, float *outputParameterU2
@@ -72,7 +72,7 @@ void loadInitialDataFromFile
 	// FILE* outputFile = fopen("src\\data\\data.txt", "r");
 	FILE* inputFile = fopen(filePath, "r");
 
-	fscanf(inputFile, "Points: %d\n", points);
+	fscanf(inputFile, "Points: %d\n", numberOfPoints);
 	fscanf(inputFile, "Parameter A for U_in: %f\n", inputParameterA);
 	fscanf(inputFile, "Parameter B for U_in: %f\n", inputParameterB);
 	fscanf(inputFile, "Parameter C for U_in: %f\n", inputParameterC);
@@ -84,47 +84,71 @@ void loadInitialDataFromFile
 	fclose(inputFile);
 }
 
-void create_time(float time[], int N, float time_start, float time_end)
+void calculateTimePoints(float timePoints[], int numberOfPoints, float timeStart, float timeEnd)
 {
-   float dt = (time_end - time_start) / (N - 1);
+   float step = (timeEnd - timeStart) / (numberOfPoints - 1);
 
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < numberOfPoints; i++)
 	{
-		time[i] = time_start + i * dt;	
+		time[i] = time_start + i * step;	
 	}
 }
 
-void create_U_in(int N, float a, float U, float time[], float U_in[])
+void calculateUInPoints
+(
+	int numberOfPoints, float inputParameterA, float inputParameterB,
+	float inputParameterC[], float timePoints[], float UInPoints[]
+)
 {
-	for (int i = 0; i < N; i++)
+	float t1 = 10, t2 = 15,	t3 = 45, t4 = 50;
+
+	for (int i = 0; i < numberOfPoints; i++)
 	{
-			U_in[i] = (U * exp(-1 * a * time[i])) * sin(time[i]);
+			if(timePoints[i] <= t1) 
+			{
+				UInPoints[i] = 0;
+			}
+			else if (timePoints[i] > t1 && timePoints[i] < t2) 
+			{
+				UInPoints[i] = inputParameterA * (time[i] - t1);
+			}
+			else if (timePoints[i] > t2 && timePoints[i] < t3)
+			{
+				UInPoints[i] = (inputParameterA * (t2 - t1)) - (inputParameterB * (time[i] - t2));
+			}
+			else if (timePoints[i] > t3 && timePoints[i] < t4)
+			{
+				UInPoints[i] = (inputParameterA * (t2 - t1)) - (inputParameterB * (t3 - t2)) - (inputParameterC * (time[i] - t3));
+			}
+			else
+			{
+				UInPoints[i] = 0;
+			}
 	}
 }
 
-void create_U_out(int N,float U_out[], float U_in1, 
-	float U_in2, float U_in3, float a1_out, float a2_out, 
-	float a3_out, float a4_out, float b1_out, float b2_out,
-	float b3_out, float b4_out, float U_in[])
+void calculateUInPoints
+(
+	int numberOfPoints, float outputParameterA,
+	float outputParameterB, float outputParameterU1, 
+	float outputParameterU2, float UInPoints[], float UOutPoints[]
+)
 {
-	for (int i = 0; i < N; i++)
+	for (int i = 0; i < numberOfPoints; i++)
 	{
-		if (U_in[i] <= U_in1)
-		{
-			U_out[i] = (a1_out * U_in[i]) + b1_out;
-		}
-		else if (U_in[i] > U_in1&& U_in[i] <= U_in2)
-		{
-			U_out[i] = (a2_out * U_in[i]) + b2_out;
-		}
-		else if (U_in[i] > U_in[2] && U_in[i] <= U_in3)
-		{
-			U_out[i] = (a3_out * U_in[i]) + b3_out;
-		}
-		else if (U_in[i] > U_in3)
-		{
-			U_out[i] = (a4_out * U_in[i]) + b4_out;
-		}
+		// if(UInPoints[i] <= outputParameterU1)
+		// {
+		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// }
+		// else if (UInPoints[i] > outputParameterU1 && UInPoints[i] <= outputParameterU2)
+		// {
+		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// } 
+		// else 
+		// {
+		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// }
+		UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
 	}
 }
 
@@ -160,20 +184,20 @@ void print_data(int N, float U, float a_in, float a1_out,
 
 void print_to_file(int N, float time[], float U_in[], float U_out[])
 {
-	FILE* arr_t, * arr_Uin, * arr_Uout, * data;
+	FILE* arr_t, * arr_UIn, * arr_UOut, * data;
 
 	arr_t = fopen("src\\data\\arr_t.txt", "w");
-	arr_Uin = fopen("src\\data\\arr_Uin.txt", "w");
-	arr_Uout = fopen("src\\data\\arr_Uout.txt", "w");
+	arr_UIn = fopen("src\\data\\arr_UIn.txt", "w");
+	arr_UOut = fopen("src\\data\\arr_UOut.txt", "w");
 	for (int i = 0; i < N; i++)
 	{
 		fprintf(arr_t, "\n %6.3f", time[i]);
-		fprintf(arr_Uin, "\n %6.3f", U_in[i]);         
-		fprintf(arr_Uout, "\n%6.3f", U_out[i]);
+		fprintf(arr_UIn, "\n %6.3f", U_in[i]);         
+		fprintf(arr_UOut, "\n%6.3f", U_out[i]);
 	}
 	fclose(arr_t);
-	fclose(arr_Uin);
-	fclose(arr_Uout);
+	fclose(arr_UIn);
+	fclose(arr_UOut);
 }
 
 float dlitelnost(int N, float U[], float dt, float U_imp)
