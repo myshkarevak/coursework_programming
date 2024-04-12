@@ -1,77 +1,87 @@
 #include "./headers/functions.h"
 
-void input(int *N, float *U, float *a_in, float *a1_out,
-	float *a2_out, float *a3_out, float *a4_out,
-	float *b1_out, float *b2_out, float *b3_out,
-	float *b4_out, float *U_in1, float *U_in2, float *U_in3)
+/*	
+	N 100
+	___________
+	ts 5
+	t1 10
+	t2 15
+	t3 45
+	t4 50
+	tn 60
+	____________
+	a 20
+	b 0.5
+	c 17
+	____________
+	a1 2.5
+	b1 10
+	U_in1 10
+	U_in2 30
+*/
+
+void readInitialValuesFromConsole
+(	
+	int *points, float *inputParameterA,
+	float *inputParameterB, float *inputParameterC,
+	float *outputParameterA, float *outputParameterB,
+	float *outputParameterU1, float *outputParameterU2
+)
 {
-	printf("N: "); scanf("%d", N);
-	printf("U: ");   scanf("%f", U);
-	printf("a: ");   scanf("%f", a_in);
-	printf("a1: "); scanf("%f", a1_out);
-	printf("a2: "); scanf("%f", a2_out);
-	printf("a3: "); scanf("%f", a3_out);
-	printf("4: "); scanf("%f", a4_out);
-	printf("b1: "); scanf("%f", b1_out);
-	printf("b2: "); scanf("%f", b2_out);
-	printf("b3: "); scanf("%f", b3_out);
-	printf("b4: "); scanf("%f", b4_out);
-	printf("U_in1: "); scanf("%f", U_in1);
-	printf("U_in2: "); scanf("%f", U_in2);
-	printf("U_in3: "); scanf("%f", U_in3);
+	printf("Points: "); scanf("%d", points);
+	printf("Parameter A for U_in: ");   scanf("%f", inputParameterA);
+	printf("Parameter B for U_in: ");   scanf("%f", inputParameterB);
+	printf("Parameter C for U_in: "); scanf("%f", inputParameterC);
+	printf("Parameter A for U_out: "); scanf("%f", outputParameterA);
+	printf("Parameter B for U_out: "); scanf("%f", outputParameterB);
+	printf("Parameter U1 for U_out: "); scanf("%f", outputParameterU1);
+	printf("Parameter U2 for U_out: "); scanf("%f", outputParameterU2);
 }
 
-void save_data(int N, float U, float a_in, float a1_out,
-	float a2_out, float a3_out, float a4_out,
-	float b1_out, float b2_out, float b3_out,
-	float b4_out, float U_in1, float U_in2, float U_in3)
+void saveInitialDataToFile
+(
+	const char *filePath, int points, float inputParameterA,
+	float inputParameterB, float inputParameterC,
+ 	float outputParameterA, float outputParameterB,
+ 	float outputParameterU1, float outputParameterU2
+)
 {
+	// FILE* data = fopen("src\\data\\data.txt", "w");
+	FILE* outputFile = fopen(filePath, "w");
 
-	FILE* data = fopen("src\\data\\data.txt", "w");
+	fprintf(outputFile, "Points: %d\n", points);
+	fprintf(outputFile, "Parameter A for U_in: %f\n", inputParameterA);
+	fprintf(outputFile, "Parameter B for U_in: %f\n", inputParameterB);
+	fprintf(outputFile, "Parameter C for U_in: %f\n", inputParameterC);
+	fprintf(outputFile, "Parameter A for U_out: %f\n", outputParameterA);
+	fprintf(outputFile, "Parameter B for U_out: %f\n", outputParameterB);
+	fprintf(outputFile, "Parameter U1 for U_out: %f\n", outputParameterU1);
+	fprintf(outputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);
 
-	fprintf(data, "N = %d\n", N);
-	fprintf(data, "U = %f\n", U);
-	fprintf(data, "a_in = %f\n", a_in);
-	fprintf(data, "a1_out = %f\n", a1_out);
-	fprintf(data, "a2_out = %f\n", a2_out);
-	fprintf(data, "a3_out = %f\n", a3_out);
-	fprintf(data, "a4_out = %f\n", a4_out);
-	fprintf(data, "b1_out = %f\n", b1_out);
-	fprintf(data, "b2_out = %f\n", b2_out);
-	fprintf(data, "b3_out = %f\n", b3_out);
-	fprintf(data, "b4_out = %f\n", b4_out);
-	fprintf(data, "U_in1 = %f\n", U_in1);
-	fprintf(data, "U_in2 = %f\n", U_in2);
-	fprintf(data, "U_in3 = %f\n", U_in3);
-
-	fclose(data);
+	fclose(outputFile);
 }
 
-void load_data(int* N, float* U, float* a_in, float* a1_out,
-	float* a2_out, float* a3_out, float* a4_out,
-	float* b1_out, float* b2_out, float* b3_out,
-	float* b4_out, float* U_in1, float* U_in2, float* U_in3)
+void loadInitialDataFromFile
+(
+	const char* filePath, int *points, float *inputParameterA,
+	float *inputParameterB, float *inputParameterC,
+	float *outputParameterA, float *outputParameterB,
+	float *outputParameterU1, float *outputParameterU2
+)
 {
-	FILE* data = fopen("src\\data\\data.txt", "a");
-	fclose(data);
-	data = fopen("src\\data\\data.txt", "r");
+	// FILE* outputFile = fopen("src\\data\\data.txt", "r");
+	FILE* inputFile = fopen(filePath, "r");
 
-	fscanf(data, "N = %d\n", N);
-	fscanf(data, "U = %f\n", U);
-	fscanf(data, "a_in = %f\n", a_in);
-	fscanf(data, "a1_out = %f\n", a1_out);
-	fscanf(data, "a2_out = %f\n", a2_out);
-	fscanf(data, "a3_out = %f\n", a3_out);
-	fscanf(data, "a4_out = %f\n", a4_out);
-	fscanf(data, "b1_out = %f\n", b1_out);
-	fscanf(data, "b2_out = %f\n", b2_out);
-	fscanf(data, "b3_out = %f\n", b3_out);
-	fscanf(data, "b4_out = %f\n", b4_out);
-	fscanf(data, "U_in1 = %f\n", U_in1);
-	fscanf(data, "U_in2 = %f\n", U_in2);
-	fscanf(data, "U_in3 = %f\n", U_in3);
+	fscanf(inputFile, "Points: %d\n", points);
+	fscanf(inputFile, "Parameter A for U_in: %f\n", inputParameterA);
+	fscanf(inputFile, "Parameter B for U_in: %f\n", inputParameterB);
+	fscanf(inputFile, "Parameter C for U_in: %f\n", inputParameterC);
+	fscanf(inputFile, "Parameter A for U_out: %f\n", outputParameterA);
+	fscanf(inputFile, "Parameter B for U_out: %f\n", outputParameterB);
+	fscanf(inputFile, "Parameter U1 for U_out: %f\n", outputParameterU1);
+	fscanf(inputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);s
 
-	fclose(data);
+	fclose(inputFile);
 }
 
 void create_time(float time[], int N, float time_start, float time_end)
