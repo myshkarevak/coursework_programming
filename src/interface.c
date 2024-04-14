@@ -41,7 +41,7 @@ void drawMenu(const char* menuItems[], int menuSize, int currentMenuItemIndex)
 		{
 			printf("  ");
 		}
-		printf("%s", menuItems[i]);
+		printf("%s\n", menuItems[i]);
 	}	
 }
 

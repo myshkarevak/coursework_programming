@@ -183,119 +183,119 @@ void printCalculationToConsole
 	}
 }
 
-void exportPointsDataToFile(char *filePath, int numberOfPoints, float pointsData[])
+void exportPointsDataToFile(const char *filePath, int numberOfPoints, float timePoints[], float pointsData[])
 {
 	FILE* exportFile = fopen(filePath, "w");
 
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-		fprintf(exportFile, "\n %.4f", pointsData[i]);
+		fprintf(exportFile, "\n%.4f\t%.4f", timePoints[i], pointsData[i]);
 	}
 
 	fclose(exportFile);
 }
 
-float dlitelnost(int N, float U[], float dt, float U_imp)
-{
-	float dlit = 0;
-	for (int i = 0; i < N; i++)
-	{
-		if (U[i] >= U_imp)
-		{
-			dlit += dt;
-		}
-	}
-	return dlit;
-}
+// float dlitelnost(int N, float U[], float dt, float U_imp)
+// {
+// 	float dlit = 0;
+// 	for (int i = 0; i < N; i++)
+// 	{
+// 		if (U[i] >= U_imp)
+// 		{
+// 			dlit += dt;
+// 		}
+// 	}
+// 	return dlit;
+// }
 
-float outsortMax(float U_out[], int N)
-{
-	int x = 0;
-	for (int i = 0; i < N - 1; i++)
-	{
-		if (U_out[i] < U_out[i + 1])
-		{
-			x = i + 1;
-		}
-	}
-	return U_out[x];
-}
+// float outsortMax(float U_out[], int N)
+// {
+// 	int x = 0;
+// 	for (int i = 0; i < N - 1; i++)
+// 	{
+// 		if (U_out[i] < U_out[i + 1])
+// 		{
+// 			x = i + 1;
+// 		}
+// 	}
+// 	return U_out[x];
+// }
 
-float outsortMin(float U_out[], int N)
-{
-	int x = 0;
-	for (int i = 0; i < N - 1; i++)
-	{
-		if (U_out[i] > U_out[i + 1])
-		{
-			x = i + 1;
-		}
-	}
-	return U_out[x];
-}
+// float outsortMin(float U_out[], int N)
+// {
+// 	int x = 0;
+// 	for (int i = 0; i < N - 1; i++)
+// 	{
+// 		if (U_out[i] > U_out[i + 1])
+// 		{
+// 			x = i + 1;
+// 		}
+// 	}
+// 	return U_out[x];
+// }
 
 
-void accurancy(int N, float U, float a_in, float a1_out,
-	float a2_out, float a3_out, float a4_out,
-	float b1_out, float b2_out, float b3_out,
-	float b4_out, float U_in1, float U_in2, float U_in3, int para)
-{
-	float eps;
-	printf("\n : ");
-	scanf("%f", &eps);
+// void accurancy(int N, float U, float a_in, float a1_out,
+// 	float a2_out, float a3_out, float a4_out,
+// 	float b1_out, float b2_out, float b3_out,
+// 	float b4_out, float U_in1, float U_in2, float U_in3, int para)
+// {
+// 	float eps;
+// 	printf("\n : ");
+// 	scanf("%f", &eps);
 
-	double p = 1;
+// 	double p = 1;
 
-	double par = 1000000; 
+// 	double par = 1000000; 
 
-	float dlit;
+// 	float dlit;
 
-	int n = N;
+// 	int n = N;
 
-	while (p > eps)
-	{
-		float* time = NULL, * U_in = NULL, * U_out = NULL;
-		time = (float*)calloc(n, sizeof(float));
-		U_in = (float*)calloc(n, sizeof(float));
-		U_out = (float*)calloc(n, sizeof(float));
-		float dt = (2*PI - PI) / (n - 1);
+// 	while (p > eps)
+// 	{
+// 		float* time = NULL, * U_in = NULL, * U_out = NULL;
+// 		time = (float*)calloc(n, sizeof(float));
+// 		U_in = (float*)calloc(n, sizeof(float));
+// 		U_out = (float*)calloc(n, sizeof(float));
+// 		float dt = (2*PI - PI) / (n - 1);
 
-		create_time(time, n, PI, 2*PI);
-		create_U_in(n, a_in, U, time, U_in);
-		create_U_out(n, U_out, U_in1, U_in2, U_in3, a1_out,
-		a2_out, a3_out, a4_out, b1_out, b2_out,
-		b3_out, b4_out, U_in);
+// 		create_time(time, n, PI, 2*PI);
+// 		create_U_in(n, a_in, U, time, U_in);
+// 		create_U_out(n, U_out, U_in1, U_in2, U_in3, a1_out,
+// 		a2_out, a3_out, a4_out, b1_out, b2_out,
+// 		b3_out, b4_out, U_in);
 
-		if (para == 1)
-		{
-			float Umax = outsortMax(U_in, n) ;
-			float Umin = outsortMin(U_in, n);
-			float Uimp = Umin + 0.5 * (Umax - Umin);
-			 dlit = dlitelnost(n, U_in, dt, Uimp);
-		}
-		else
-		{
-			float Umax = outsortMax(U_out, n);
+// 		if (para == 1)
+// 		{
+// 			float Umax = outsortMax(U_in, n) ;
+// 			float Umin = outsortMin(U_in, n);
+// 			float Uimp = Umin + 0.5 * (Umax - Umin);
+// 			 dlit = dlitelnost(n, U_in, dt, Uimp);
+// 		}
+// 		else
+// 		{
+// 			float Umax = outsortMax(U_out, n);
 
-			float Umin = outsortMin(U_out, n);
+// 			float Umin = outsortMin(U_out, n);
 
-			float Uimp = Umin + 0.5 * (Umax - Umin);
-			 dlit = dlitelnost(n, U_in, dt, Uimp);
-		}
+// 			float Uimp = Umin + 0.5 * (Umax - Umin);
+// 			 dlit = dlitelnost(n, U_in, dt, Uimp);
+// 		}
 		
 
-		p = fabs(par - dlit) / dlit;
+// 		p = fabs(par - dlit) / dlit;
 
-		printf("n = %d parametr = %f pogrechnost = %lf\n", n, dlit, p);
+// 		printf("n = %d parametr = %f pogrechnost = %lf\n", n, dlit, p);
 
-		par = dlit;
+// 		par = dlit;
 
-		n = 2 * n;
+// 		n = 2 * n;
 
-		free(time);
-		free(U_in);
-		free(U_out);
-	}
+// 		free(time);
+// 		free(U_in);
+// 		free(U_out);
+// 	}
 
-	system("pause");
-}
+// 	system("pause");
+// }

@@ -1,49 +1,74 @@
-#ifndef DATA_H
-#define DATA_H
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
 #define _CRT_SECURE_NO_WARNINGS
+// TODO define cls if Windows, clear if Linux
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <conio.h>
-#define PI 3.1416
+#include <conio.h> //TODO #include <curses.h>
 
 void showTitleScreen();
+
 int getUserChoiceFromMenu(const char* menuItems[]);
 
-void input(int* N, float* U, float* a_in, float* a1_out,
-	float* a2_out, float* a3_out, float* a4_out,
-	float* b1_out, float* b2_out, float* b3_out,
-	float* b4_out, float* U_in1, float* U_in2, float* U_in3);
+void readInitialValuesFromConsole
+(	
+	int *numberOfPoints, float *inputParameterA,
+	float *inputParameterB, float *inputParameterC,
+	float *outputParameterA, float *outputParameterB,
+	float *outputParameterU1, float *outputParameterU2
+);
 
-void save_data(int N, float U, float a_in, float a1_out,
-	float a2_out, float a3_out, float a4_out,
-	float b1_out, float b2_out, float b3_out,
-	float b4_out, float U_in1, float U_in2, float U_in3);
+void printInitialValuesToConsole
+(
+	int numberOfPoints, float inputParameterA,
+	float inputParameterB, float inputParameterC,
+ 	float outputParameterA, float outputParameterB,
+ 	float outputParameterU1, float outputParameterU2
+);
 
-void load_data(int* N, float* U, float* a_in, float* a1_out,
-	float* a2_out, float* a3_out, float* a4_out,
-	float* b1_out, float* b2_out, float* b3_out,
-	float* b4_out, float* U_in1, float* U_in2, float* U_in3);
+void saveInitialDataToFile
+(
+	const char *filePath, int numberOfPoints, float inputParameterA,
+	float inputParameterB, float inputParameterC,
+ 	float outputParameterA, float outputParameterB,
+ 	float outputParameterU1, float outputParameterU2
+);
 
-void create_time(float time[], int N, float time_start, float time_end);
+void loadInitialDataFromFile
+(
+	const char *filePath, int *numberOfPoints, float *inputParameterA,
+	float *inputParameterB, float *inputParameterC,
+	float *outputParameterA, float *outputParameterB,
+	float *outputParameterU1, float *outputParameterU2
+);
 
-void create_U_in(int N, float a, float U, float time[], float U_in[]);
+void calculateTimePoints
+(
+	float timePoints[], int numberOfPoints, float timeStart, float timeEnd
+);
 
-void create_U_out(int N, float U_out[], float U_in1, float U_in2, 
-	float U_in3, float a1_out, float a2_out, float a3_out, float a4_out,
- 	 float b1_out, float b2_out, float b3_out, float b4_out, float U_in[]);
+void calculateUInPoints
+(
+	int numberOfPoints, float inputParameterA, float inputParameterB,
+	float inputParameterC, float timePoints[], float UInPoints[]
+);
 
-void print_data(int N, float U, float a_in, float a1_out,
-	float a2_out, float a3_out, float a4_out,
-	float b1_out, float b2_out, float b3_out,
-	float b4_out, float U_in1, float U_in2, float U_in3);
-void print_to_console(int N, float time[], float U_in[], float U_out[]);
+void calculateUOutPoints
+(
+	int numberOfPoints, float outputParameterA,
+	float outputParameterB, float outputParameterU1, 
+	float outputParameterU2, float UInPoints[], float UOutPoints[]
+);
 
-void print_to_file(int N, float time[], float U_in[], float U_out[]);
+void printCalculationToConsole
+(
+	int numberOfPoints, float timePoints[], float UInPoints[], float UOutPoints[]
+);
 
-void accurancy(int N, float U, float a_in, float a1_out,
-	float a2_out, float a3_out, float a4_out,
-	float b1_out, float b2_out, float b3_out,
-	float b4_out, float U_in1, float U_in2, float U_in3, int para);
+void exportPointsDataToFile
+(
+	const char *filePath, int numberOfPoints, float timePoints[], float pointsData[]
+);
 
 #endif

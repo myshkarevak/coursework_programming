@@ -1,34 +1,33 @@
 #include "./headers/functions.h"
-
+// TODO use arrows to navigate message
 const char* menuItems[] = 
 	{
-		"1. Input data from console\n",
-		"2. Save data to file\n",
-		"3. Load data from file\n",
-		"4. Print calculations\n", 
-		"5. Draw graphs\n",
-		"6. Open WXMaxima calculation\n",
-		// "7. Calculate and print U_in duration with accuracy\n",
-		// "8. Calculate and print U_out duration with accuracy\n",
-		"7. Exit\n",
-		NULL
+		"1. Input initial data from console",
+		"2. Load initial data from file",
+		"3. Save initial data to file",
+		"4. Calculate data", 
+		"5. Export calculation",
+		// "6. Calculate and print U_in duration with accuracy",
+		// "7. Calculate and print U_out duration with accuracy",
+		"6. Exit",
+		NULL // TODO
 	};
-const int EXIT_INDEX = 7;
+const int EXIT_INDEX = 6; // TODO
 
 int main()
 {	
-	system("chcp 1251");
-	system("cls");
+	// system("chcp 1251");
+	// system("pause");
 
+	system("cls");
 	showTitleScreen();
 	system("pause");
 
-	int N = 0;
-	float time_start = PI, time_end = 2 * PI;
-	float dt = 0, a_in = 0, a1_out = 0, a2_out = 0, a3_out = 0, a4_out = 0;
-	float U = 0, b1_out = 0, b2_out = 0, b3_out = 0, b4_out = 0, U_in1=0 , U_in2 =0, U_in3=0;
-	float* time = NULL, * U_in = NULL, * U_out = NULL;
-	int choice = 0;
+	int choice = 0, numberOfPoints = 0;
+	float inputParameterA = 0, inputParameterB = 0, inputParameterC = 0,
+		outputParameterA = 0,outputParameterB = 0, outputParameterU1 = 0,
+		outputParameterU2 = 0, timeStart = 0, timeEnd = 0,
+		*timePoints = NULL, *UInPoints = NULL, *UOutPoints = NULL;
 
 	while (choice != EXIT_INDEX)
 	{
@@ -38,86 +37,136 @@ int main()
 		{
 		case 1:
 			{
-			input(&N, &U, &a_in, &a1_out,
-				&a2_out, &a3_out, &a4_out,
-				&b1_out, &b2_out, &b3_out,
-				&b4_out, &U_in1, &U_in2, &U_in3);
-	
-			printf("created");
-			system("pause");
-			break;
-			}
-		case 2:
-		{
-			save_data(N, U, a_in, a1_out,
-				a2_out, a3_out, a4_out,
-				b1_out, b2_out, b3_out,
-				b4_out,U_in1, U_in2, U_in3);
-			
-			printf("\nsaved!\n");
-			system("pause");
-			break;
-		}
-		case 3:
-		{
-			load_data(&N, &U, &a_in, &a1_out,
-				&a2_out, &a3_out, &a4_out,
-				&b1_out, &b2_out, &b3_out,
-				&b4_out, &U_in1, &U_in2, &U_in3);
+				readInitialValuesFromConsole // TODO if data have errors
+				(	
+					&numberOfPoints, &inputParameterA,
+					&inputParameterB, &inputParameterC,
+					&outputParameterA, &outputParameterB,
+					&outputParameterU1, &outputParameterU2
+				);
 
-			printf("\nloaded!\n");
-			system("pause");
-			break;
-		}
-		case 4:
-		{	
-			print_data(N, U, a_in, a1_out,
-				a2_out, a3_out, a4_out,
-				b1_out, b2_out, b3_out,
-				b4_out, U_in1, U_in2, U_in3);
+				system("cls");
+				printf("Initial data:\n\n");
 
-			if (time != NULL || U_in != NULL || U_out != NULL)
-			{
-				free(time);
-				free(U_in);
-				free(U_out);
-			}
+				printInitialValuesToConsole // TODO if data have errors
+				(	
+					numberOfPoints, inputParameterA,
+					inputParameterB, inputParameterC,
+					outputParameterA, outputParameterB,
+					outputParameterU1, outputParameterU2
+				);
 
-			time = (float*)calloc(N, sizeof(float));
-			U_in = (float*)calloc(N, sizeof(float));
-			U_out = (float*)calloc(N, sizeof(float));
-
-			create_time(time, N, time_start, time_end);
-			create_U_in(N, a_in, U, time, U_in);
-			create_U_out(N, U_out, U_in1, U_in2, U_in3, a1_out,
-				a2_out, a3_out, a4_out, b1_out, b2_out,
-				b3_out, b4_out, U_in);
-			print_to_console(N, time, U_in, U_out);
-
-			printf("\nprinted!\n");
-			system("pause");
-			break;
-		}
-		case 5:
-		{
-			if (time == NULL || U_in == NULL || U_out == NULL)
-			{
-				printf("\nerror! no data to save please create that first\n");
 				system("pause");
 				break;
 			}
-			print_to_file(N, time, U_in, U_out);
-			system("graph.wxm");
-			system("pause");
-			break;
-		}
-		case 6:
+		case 2:
+			{
+				loadInitialDataFromFile // TODO if file has no values
+				(
+					"data/initial.txt", &numberOfPoints, &inputParameterA,
+					&inputParameterB, &inputParameterC,
+					&outputParameterA, &outputParameterB,
+					&outputParameterU1, &outputParameterU2
+				);
+
+				system("cls");
+				printf("Initial data:\n\n");
+
+				printInitialValuesToConsole // TODO if data have errors
+				(	
+					numberOfPoints, inputParameterA,
+					inputParameterB, inputParameterC,
+					outputParameterA, outputParameterB,
+					outputParameterU1, outputParameterU2
+				);
+
+				system("pause");
+				break;
+			}
+		case 3:
+			{
+				saveInitialDataToFile // TODO if data have errors
+				(	
+					"data/initial.txt", numberOfPoints, inputParameterA,
+					inputParameterB, inputParameterC,
+					outputParameterA, outputParameterB,
+					outputParameterU1, outputParameterU2
+				);
+
+				system("pause");
+				break;
+			}
+		case 4:
+			{	
+				printInitialValuesToConsole // TODO if data have errors
+				(	
+					numberOfPoints, inputParameterA,
+					inputParameterB, inputParameterC,
+					outputParameterA, outputParameterB,
+					outputParameterU1, outputParameterU2
+				);
+
+				// TODO
+				// if (time != NULL || U_in != NULL || U_out != NULL)
+				// {
+				// 	free(time);
+				// 	free(U_in);
+				// 	free(U_out);
+				// }
+
+				timePoints = (float*)calloc(numberOfPoints, sizeof(float));
+				UInPoints = (float*)calloc(numberOfPoints, sizeof(float));
+				UOutPoints = (float*)calloc(numberOfPoints, sizeof(float));
+
+				calculateTimePoints(timePoints, numberOfPoints, timeStart, timeEnd);
+
+				calculateUInPoints
+				(
+					numberOfPoints, 
+					inputParameterA,
+					inputParameterB,
+					inputParameterC, 
+					timePoints,
+					UInPoints
+				);
+
+				calculateUOutPoints
+				(
+					numberOfPoints,
+					outputParameterA,
+					outputParameterB,
+					outputParameterU1, 
+					outputParameterU2,
+					UInPoints,
+					UOutPoints
+				);
+
+				printCalculationToConsole
+				(
+					numberOfPoints,
+					timePoints,
+					UInPoints,
+					UOutPoints
+				);
+
+				system("pause");
+				break;
+			}
+		case 5:
 		{
-			system("calculation.wxmx");
+			// TODO
+			// if (time == NULL || U_in == NULL || U_out == NULL)
+			// {
+			// 	printf("\nerror! no data to save please create that first\n");
+			// 	system("pause");
+			// 	break;
+			// }
+			exportPointsDataToFile("data/U_in.txt", numberOfPoints, timePoints, UInPoints);
+			exportPointsDataToFile("data/U_out.txt", numberOfPoints, timePoints, UOutPoints);
 			system("pause");
 			break;
 		}
-		// case 7:
+		// case 6:
 		// {
 		// 	accurancy(N, U, a_in, a1_out,
 		// 		a2_out, a3_out, a4_out,
@@ -126,7 +175,7 @@ int main()
 		// 	system("pause");
 		// 	break;
 		// }
-		// case 8:
+		// case 7:
 		// {
 		// 	accurancy(N, U, a_in, a1_out,
 		// 		a2_out, a3_out, a4_out,
@@ -135,12 +184,14 @@ int main()
 		// 	system("pause");
 		// 	break;
 		// }
-		case 7:
+		case 6:
 		{	
-			free(time);
-			free(U_in);
-			free(U_out);
+			free(timePoints);
+			free(UInPoints);
+			free(UOutPoints);
+
 			printf("exit...");
+
 			return 0;
 		}
 		}
