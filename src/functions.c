@@ -97,7 +97,7 @@ void loadInitialDataFromFile
 	fscanf(inputFile, "Parameter A for U_out: %f\n", outputParameterA);
 	fscanf(inputFile, "Parameter B for U_out: %f\n", outputParameterB);
 	fscanf(inputFile, "Parameter U1 for U_out: %f\n", outputParameterU1);
-	fscanf(inputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);s
+	fscanf(inputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);
 
 	fclose(inputFile);
 }
@@ -108,14 +108,14 @@ void calculateTimePoints(float timePoints[], int numberOfPoints, float timeStart
 
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-		time[i] = time_start + i * step;	
+		timePoints[i] = timeStart + i * step;	
 	}
 }
 
 void calculateUInPoints
 (
 	int numberOfPoints, float inputParameterA, float inputParameterB,
-	float inputParameterC[], float timePoints[], float UInPoints[]
+	float inputParameterC, float timePoints[], float UInPoints[]
 )
 {
 	float t1 = 10, t2 = 15,	t3 = 45, t4 = 50;
@@ -128,15 +128,15 @@ void calculateUInPoints
 			}
 			else if (timePoints[i] > t1 && timePoints[i] < t2) 
 			{
-				UInPoints[i] = inputParameterA * (time[i] - t1);
+				UInPoints[i] = inputParameterA * (timePoints[i] - t1);
 			}
 			else if (timePoints[i] > t2 && timePoints[i] < t3)
 			{
-				UInPoints[i] = (inputParameterA * (t2 - t1)) - (inputParameterB * (time[i] - t2));
+				UInPoints[i] = (inputParameterA * (t2 - t1)) - (inputParameterB * (timePoints[i] - t2));
 			}
 			else if (timePoints[i] > t3 && timePoints[i] < t4)
 			{
-				UInPoints[i] = (inputParameterA * (t2 - t1)) - (inputParameterB * (t3 - t2)) - (inputParameterC * (time[i] - t3));
+				UInPoints[i] = (inputParameterA * (t2 - t1)) - (inputParameterB * (t3 - t2)) - (inputParameterC * (timePoints[i] - t3));
 			}
 			else
 			{
@@ -179,7 +179,7 @@ void printCalculationToConsole
 
 	for (int i = 0; i < numberOfPoints; i++)     
 	{
-		printf("%d %.4f %.4f %.4f\n", i + 1, time[i], UInPoints[i], UOutPoints[i]);
+		printf("%d %.4f %.4f %.4f\n", i + 1, timePoints[i], UInPoints[i], UOutPoints[i]);
 	}
 }
 
