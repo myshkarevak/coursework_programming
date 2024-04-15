@@ -1,15 +1,9 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 #define _CRT_SECURE_NO_WARNINGS
-// TODO define cls if Windows, clear if Linux
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <conio.h> //TODO #include <curses.h>
-
-void showTitleScreen();
-
-int getUserChoiceFromMenu(const char* menuItems[]);
 
 void readInitialValuesFromConsole
 (	

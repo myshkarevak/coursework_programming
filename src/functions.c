@@ -1,5 +1,5 @@
 #include "./headers/functions.h"
-
+#include "./headers/interface.h"
 /*	
 	N 100
 	___________

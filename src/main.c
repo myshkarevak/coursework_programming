@@ -1,4 +1,5 @@
 #include "./headers/functions.h"
+#include "./headers/interface.h"
 // TODO use arrows to navigate message
 const char* menuItems[] = 
 	{
@@ -19,7 +20,7 @@ int main()
 	// system("chcp 1251");
 	// system("pause");
 
-	system("cls");
+	clearConsole();
 	showTitleScreen();
 	system("pause");
 
@@ -45,7 +46,7 @@ int main()
 					&outputParameterU1, &outputParameterU2
 				);
 
-				system("cls");
+				clearConsole();
 				printf("Initial data:\n\n");
 
 				printInitialValuesToConsole // TODO if data have errors
@@ -69,7 +70,7 @@ int main()
 					&outputParameterU1, &outputParameterU2
 				);
 
-				system("cls");
+				clearConsole();
 				printf("Initial data:\n\n");
 
 				printInitialValuesToConsole // TODO if data have errors
