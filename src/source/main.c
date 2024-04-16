@@ -1,5 +1,5 @@
-#include "./headers/functions.h"
-#include "./headers/interface.h"
+#include "./../headers/functions.h"
+#include "./../headers/interface.h"
 // TODO use arrows to navigate message
 const char* menuItems[] = 
 	{
@@ -27,7 +27,7 @@ int main()
 	int choice = 0, numberOfPoints = 0;
 	float inputParameterA = 0, inputParameterB = 0, inputParameterC = 0,
 		outputParameterA = 0,outputParameterB = 0, outputParameterU1 = 0,
-		outputParameterU2 = 0, timeStart = 0, timeEnd = 0,
+		outputParameterU2 = 0, timeEnd = 0,
 		*timePoints = NULL, *UInPoints = NULL, *UOutPoints = NULL;
 
 	while (choice != EXIT_INDEX)
@@ -64,7 +64,7 @@ int main()
 			{
 				loadInitialDataFromFile // TODO if file has no values
 				(
-					"data/initial.txt", &numberOfPoints, &inputParameterA,
+					"./../data/initial_data.txt", &numberOfPoints, &inputParameterA,
 					&inputParameterB, &inputParameterC,
 					&outputParameterA, &outputParameterB,
 					&outputParameterU1, &outputParameterU2
@@ -87,8 +87,8 @@ int main()
 		case 3:
 			{
 				saveInitialDataToFile // TODO if data have errors
-				(	
-					"data/initial.txt", numberOfPoints, inputParameterA,
+				(	// TODO export to special folder
+					"./../data/initial.txt", numberOfPoints, inputParameterA,
 					inputParameterB, inputParameterC,
 					outputParameterA, outputParameterB,
 					outputParameterU1, outputParameterU2
@@ -119,7 +119,7 @@ int main()
 				UInPoints = (float*)calloc(numberOfPoints, sizeof(float));
 				UOutPoints = (float*)calloc(numberOfPoints, sizeof(float));
 
-				calculateTimePoints(timePoints, numberOfPoints, timeStart, timeEnd);
+				calculateTimePoints(timePoints, numberOfPoints);
 
 				calculateUInPoints
 				(

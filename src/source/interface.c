@@ -1,5 +1,5 @@
-#include "./headers/interface.h"
-#include "./headers/functions.h"
+#include "./../headers/interface.h"
+#include "./../headers/functions.h"
 
 void clearConsole()
 {
@@ -12,7 +12,7 @@ void clearConsole()
 
 void showTitleScreen()
 {
-	FILE *titleFile = fopen("src\\data\\zast.txt", "r");
+	FILE *titleFile = fopen("..\\src\\data\\zast.txt", "r");
 	char symbol;
 	while (!feof(titleFile))
 	{

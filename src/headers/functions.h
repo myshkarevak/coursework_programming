@@ -1,6 +1,12 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 #define _CRT_SECURE_NO_WARNINGS
+#define TIME_START 5
+#define TIME_BREAKPOINT_1 10
+#define TIME_BREAKPOINT_2 15
+#define TIME_BREAKPOINT_3 45
+#define TIME_BREAKPOINT_4 50
+#define TIME_END 60
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -39,7 +45,7 @@ void loadInitialDataFromFile
 
 void calculateTimePoints
 (
-	float timePoints[], int numberOfPoints, float timeStart, float timeEnd
+	float timePoints[], int numberOfPoints
 );
 
 void calculateUInPoints
