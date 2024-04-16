@@ -1,66 +1,80 @@
-#include "./headers/functions.h"
+#include "./../headers/interface.h"
+#include "./../headers/functions.h"
 
-#define ARRAY_SIZE(x) (sizeof((x)) / sizeof((x)[0]))
-
-const int ARROW_DOWN = 80;
-const int ARROW_UP = 72;
-const int FIRST_ACTIVE_INDEX = 1;
-const char ENTER_KEY = 13;
+void clearConsole()
+{
+	#ifdef _WIN32
+		system("cls");
+	#else
+		system("clear");
+	#endif
+}
 
 void showTitleScreen()
 {
-	FILE* titleFile = fopen("src\\data\\zast.txt", "r"); 
+	FILE *titleFile = fopen("..\\src\\data\\zast.txt", "r");
 	char symbol;
-	while (!feof(titleFile))                        
+	while (!feof(titleFile))
 	{
-		fscanf(titleFile, "%c", &symbol);             
+		fscanf(titleFile, "%c", &symbol);
 		printf("%c", symbol);
 	}
 	printf("\n");
 	fclose(titleFile);
 }
 
-int calculateMenuSize(const char* menuItems[])
+int getPressedKeyCode()
 {
-    int index = 0;
-	while(menuItems[index] != NULL) {
+	#ifdef _WIN32
+		return _getch();
+	#else
+		return 1
+	#endif
+}
+
+int calculateMenuSize(const char *menuItems[])
+{
+	int index = 0;
+	while (menuItems[index] != NULL)
+	{
 		index++;
 	}
 	return index;
 }
 
-void drawMenu(const char* menuItems[], int menuSize, int currentMenuItemIndex)
+void drawMenu(const char *menuItems[], int menuSize, int currentMenuItemIndex)
 {
 	for (int i = 0; i < menuSize; i++)
 	{
-		if(currentMenuItemIndex == i + 1)
+		if (currentMenuItemIndex == i + 1)
 		{
 			printf("->");
-		} 
-		else 
+		}
+		else
 		{
 			printf("  ");
 		}
 		printf("%s\n", menuItems[i]);
-	}	
+	}
 }
 
-int getUserChoiceFromMenu(const char* menuItems[])
+int getUserChoiceFromMenu(const char *menuItems[])
 {
 	const int MENU_SIZE = calculateMenuSize(menuItems);
 	const int LAST_ACTIVE_INDEX = MENU_SIZE;
 	int currentMenuItemIndex = FIRST_ACTIVE_INDEX;
 	char pressedKey = '1';
 
-	while (pressedKey != 13)
+	while (pressedKey != ENTER_KEY)
 	{
-		system("cls");
+		clearConsole();
 		drawMenu(menuItems, MENU_SIZE, currentMenuItemIndex);
-		pressedKey = _getch();
+		pressedKey = getPressedKeyCode();
 
 		switch (pressedKey)
 		{
-		case ARROW_DOWN: {
+		case ARROW_DOWN:
+		{
 			currentMenuItemIndex++;
 			if (currentMenuItemIndex == MENU_SIZE + 1)
 			{
@@ -68,7 +82,8 @@ int getUserChoiceFromMenu(const char* menuItems[])
 			}
 			break;
 		}
-		case ARROW_UP: {
+		case ARROW_UP:
+		{
 			currentMenuItemIndex--;
 			if (currentMenuItemIndex == 0)
 			{
@@ -79,6 +94,6 @@ int getUserChoiceFromMenu(const char* menuItems[])
 			break;
 		}
 	}
-	system("cls");
+	clearConsole();
 	return currentMenuItemIndex;
 }

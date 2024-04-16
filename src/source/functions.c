@@ -1,24 +1,5 @@
-#include "./headers/functions.h"
-
-/*	
-	N 100
-	___________
-	ts 5
-	t1 10
-	t2 15
-	t3 45
-	t4 50
-	tn 60
-	____________
-	a 20
-	b 0.5
-	c 17
-	____________
-	a1 2.5
-	b1 10
-	U_in1 10
-	U_in2 30
-*/
+#include "./../headers/functions.h"
+#include "./../headers/interface.h"
 
 void readInitialValuesFromConsole
 (	
@@ -102,13 +83,13 @@ void loadInitialDataFromFile
 	fclose(inputFile);
 }
 
-void calculateTimePoints(float timePoints[], int numberOfPoints, float timeStart, float timeEnd)
+void calculateTimePoints(float timePoints[], int numberOfPoints)
 {
-   float step = (timeEnd - timeStart) / (numberOfPoints - 1);
+   float step = (TIME_END - TIME_START) / (numberOfPoints - 1);
 
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-		timePoints[i] = timeStart + i * step;	
+		timePoints[i] = TIME_START + i * step;	
 	}
 }
 
@@ -118,25 +99,41 @@ void calculateUInPoints
 	float inputParameterC, float timePoints[], float UInPoints[]
 )
 {
-	float t1 = 10, t2 = 15,	t3 = 45, t4 = 50;
-
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-			if(timePoints[i] <= t1) 
+			if
+			(
+				timePoints[i] <= TIME_BREAKPOINT_1
+			) 
 			{
 				UInPoints[i] = 0;
 			}
-			else if (timePoints[i] > t1 && timePoints[i] < t2) 
+			else if 
+			(
+				timePoints[i] > TIME_BREAKPOINT_1 && timePoints[i] < TIME_BREAKPOINT_2
+			) 
 			{
-				UInPoints[i] = inputParameterA * (timePoints[i] - t1);
+				UInPoints[i] =
+				inputParameterA * (timePoints[i] - TIME_BREAKPOINT_1);
 			}
-			else if (timePoints[i] > t2 && timePoints[i] < t3)
+			else if
+			(
+				timePoints[i] > TIME_BREAKPOINT_2 && timePoints[i] < TIME_BREAKPOINT_3
+			)
 			{
-				UInPoints[i] = (inputParameterA * (t2 - t1)) - (inputParameterB * (timePoints[i] - t2));
+				UInPoints[i] =
+					(inputParameterA * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
+					- (inputParameterB * (timePoints[i] - TIME_BREAKPOINT_2));
 			}
-			else if (timePoints[i] > t3 && timePoints[i] < t4)
+			else if
+			(
+				timePoints[i] > TIME_BREAKPOINT_3 && timePoints[i] < TIME_BREAKPOINT_4
+			)
 			{
-				UInPoints[i] = (inputParameterA * (t2 - t1)) - (inputParameterB * (t3 - t2)) - (inputParameterC * (timePoints[i] - t3));
+				UInPoints[i] = 
+					(inputParameterA * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
+					- (inputParameterB * (TIME_BREAKPOINT_3 - TIME_BREAKPOINT_2))
+					- (inputParameterC * (timePoints[i] - TIME_BREAKPOINT_3));
 			}
 			else
 			{
@@ -175,11 +172,11 @@ void printCalculationToConsole
 	int numberOfPoints, float timePoints[], float UInPoints[], float UOutPoints[]
 )
 {	
-	printf("Point\tTime\tU_in\tU_out\n");
+	printf("Point\t|\tTime\t|\tU_in\t|\tU_out\t|\n");
 
 	for (int i = 0; i < numberOfPoints; i++)     
 	{
-		printf("%d %.4f %.4f %.4f\n", i + 1, timePoints[i], UInPoints[i], UOutPoints[i]);
+		printf("%d\t|\t%.4f\t|\t%.4f\t|\t%.4f\t|\n", i + 1, timePoints[i], UInPoints[i], UOutPoints[i]);
 	}
 }
 
@@ -189,7 +186,7 @@ void exportPointsDataToFile(const char *filePath, int numberOfPoints, float time
 
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-		fprintf(exportFile, "\n%.4f\t%.4f", timePoints[i], pointsData[i]);
+		fprintf(exportFile, "%.4f\t%.4f\n", timePoints[i], pointsData[i]);
 	}
 
 	fclose(exportFile);
