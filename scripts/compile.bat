@@ -7,3 +7,4 @@ g++ -c ../src/source/*.c
 cd ../app
 g++ -o app.exe ../build/*.o
 echo "operation completed!"
+cd ..

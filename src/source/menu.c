@@ -1,14 +1,19 @@
-#include "./../headers/interface.h"
+#include "./../headers/libraries.h"
 #include "./../headers/functions.h"
+#include "./../headers/menu.h"
 
-void clearConsole()
-{
-	#ifdef _WIN32
-		system("cls");
-	#else
-		system("clear");
-	#endif
-}
+// TODO use arrows to navigate message
+const char* menuItems[] = 
+	{
+		"1. Input initial data from console",
+		"2. Load initial data from file",
+		"3. Export initial data to file",
+		"4. Calculate data", 
+		"5. Export calculation",
+		"6. Calculate parameters with given accuracy",
+		"7. Exit",
+		NULL // TODO
+	};
 
 void showTitleScreen()
 {
@@ -58,10 +63,11 @@ void drawMenu(const char *menuItems[], int menuSize, int currentMenuItemIndex)
 	}
 }
 
-int getUserChoiceFromMenu(const char *menuItems[])
+int getUserChoiceFromMenu()
 {
 	const int MENU_SIZE = calculateMenuSize(menuItems);
 	const int LAST_ACTIVE_INDEX = MENU_SIZE;
+
 	int currentMenuItemIndex = FIRST_ACTIVE_INDEX;
 	char pressedKey = '1';
 
@@ -73,27 +79,31 @@ int getUserChoiceFromMenu(const char *menuItems[])
 
 		switch (pressedKey)
 		{
-		case ARROW_DOWN:
-		{
-			currentMenuItemIndex++;
-			if (currentMenuItemIndex == MENU_SIZE + 1)
+			case ARROW_DOWN:
 			{
-				currentMenuItemIndex = FIRST_ACTIVE_INDEX;
+				currentMenuItemIndex++;
+				if (currentMenuItemIndex == MENU_SIZE + 1)
+				{
+					currentMenuItemIndex = FIRST_ACTIVE_INDEX;
+				}
+				break;
 			}
-			break;
-		}
-		case ARROW_UP:
-		{
-			currentMenuItemIndex--;
-			if (currentMenuItemIndex == 0)
+			case ARROW_UP:
 			{
-				currentMenuItemIndex = LAST_ACTIVE_INDEX;
+				currentMenuItemIndex--;
+				if (currentMenuItemIndex == 0)
+				{
+					currentMenuItemIndex = LAST_ACTIVE_INDEX;
+				}
 			}
-		}
-		default:
-			break;
+			default:
+			{
+				break;
+			}
 		}
 	}
+
 	clearConsole();
+
 	return currentMenuItemIndex;
 }

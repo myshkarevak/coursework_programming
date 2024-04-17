@@ -1,5 +1,15 @@
+#include "./../headers/libraries.h"
 #include "./../headers/functions.h"
-#include "./../headers/interface.h"
+#include "./../headers/menu.h"
+
+void clearConsole()
+{
+	#ifdef _WIN32
+		system("cls");
+	#else
+		system("clear");
+	#endif
+}
 
 void readInitialValuesFromConsole
 (	
@@ -9,6 +19,7 @@ void readInitialValuesFromConsole
 	float *outputParameterU1, float *outputParameterU2
 )
 {
+	clearConsole();
 	printf("Points: "); scanf("%d", numberOfPoints);
 	printf("Parameter A for U_in: ");   scanf("%f", inputParameterA);
 	printf("Parameter B for U_in: ");   scanf("%f", inputParameterB);
@@ -27,6 +38,8 @@ void printInitialValuesToConsole
  	float outputParameterU1, float outputParameterU2
 )
 {
+	clearConsole();
+	printf("Initial data:\n\n");
 	printf("Points: %d\n", numberOfPoints);
 	printf("Parameter A for U_in: %f\n", inputParameterA);
 	printf("Parameter B for U_in: %f\n", inputParameterB);
@@ -37,15 +50,17 @@ void printInitialValuesToConsole
 	printf("Parameter U2 for U_out: %f\n", outputParameterU2);
 }
 
-void saveInitialDataToFile
+void exportInitialDataToFile
 (
-	const char *filePath, int numberOfPoints, float inputParameterA,
-	float inputParameterB, float inputParameterC,
- 	float outputParameterA, float outputParameterB,
- 	float outputParameterU1, float outputParameterU2
+	const char *filePath, int numberOfPoints,
+	float inputParameterA, float inputParameterB,
+	float inputParameterC,float outputParameterA,
+	float outputParameterB, float outputParameterU1,
+	float outputParameterU2
 )
 {
 	// FILE* data = fopen("src\\data\\data.txt", "w");
+	clearConsole();
 	FILE* outputFile = fopen(filePath, "w");
 
 	fprintf(outputFile, "Points: %d\n", numberOfPoints);
@@ -62,13 +77,15 @@ void saveInitialDataToFile
 
 void loadInitialDataFromFile
 (
-	const char* filePath, int *numberOfPoints, float *inputParameterA,
-	float *inputParameterB, float *inputParameterC,
-	float *outputParameterA, float *outputParameterB,
-	float *outputParameterU1, float *outputParameterU2
+	const char* filePath, int *numberOfPoints,
+	float *inputParameterA, float *inputParameterB,
+	float *inputParameterC,	float *outputParameterA,
+	float *outputParameterB, float *outputParameterU1,
+	float *outputParameterU2
 )
 {
 	// FILE* outputFile = fopen("src\\data\\data.txt", "r");
+	clearConsole();
 	FILE* inputFile = fopen(filePath, "r");
 
 	fscanf(inputFile, "Points: %d\n", numberOfPoints);
@@ -146,7 +163,8 @@ void calculateUOutPoints
 (
 	int numberOfPoints, float outputParameterA,
 	float outputParameterB, float outputParameterU1, 
-	float outputParameterU2, float UInPoints[], float UOutPoints[]
+	float outputParameterU2, float UInPoints[],
+	float UOutPoints[]
 )
 {
 	for (int i = 0; i < numberOfPoints; i++)
@@ -163,24 +181,37 @@ void calculateUOutPoints
 		// {
 		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
 		// }
-		UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		UOutPoints[i] =
+			outputParameterA * UInPoints[i] + outputParameterB;
 	}
 }
 
 void printCalculationToConsole
 (
-	int numberOfPoints, float timePoints[], float UInPoints[], float UOutPoints[]
+	int numberOfPoints, float timePoints[],
+	float UInPoints[], float UOutPoints[]
 )
 {	
 	printf("Point\t|\tTime\t|\tU_in\t|\tU_out\t|\n");
 
 	for (int i = 0; i < numberOfPoints; i++)     
 	{
-		printf("%d\t|\t%.4f\t|\t%.4f\t|\t%.4f\t|\n", i + 1, timePoints[i], UInPoints[i], UOutPoints[i]);
+		printf
+		(
+			"%d\t|\t%.4f\t|\t%.4f\t|\t%.4f\t|\n",
+			i + 1,
+			timePoints[i],
+			UInPoints[i],
+			UOutPoints[i]
+		);
 	}
 }
 
-void exportPointsDataToFile(const char *filePath, int numberOfPoints, float timePoints[], float pointsData[])
+void exportPointsDataToFile
+(
+	const char *filePath, int numberOfPoints,
+	float timePoints[], float pointsData[]
+)
 {
 	FILE* exportFile = fopen(filePath, "w");
 
@@ -190,6 +221,17 @@ void exportPointsDataToFile(const char *filePath, int numberOfPoints, float time
 	}
 
 	fclose(exportFile);
+}
+
+void calculateParameterWithGivenAccuracy
+(
+	int numberOfPoints, float inputParameterA,
+	float inputParameterB, float inputParameterC,
+ 	float outputParameterA, float outputParameterB,
+ 	float outputParameterU1, float outputParameterU2
+) 
+{
+	// TODO
 }
 
 // float dlitelnost(int N, float U[], float dt, float U_imp)
@@ -230,7 +272,6 @@ void exportPointsDataToFile(const char *filePath, int numberOfPoints, float time
 // 	}
 // 	return U_out[x];
 // }
-
 
 // void accurancy(int N, float U, float a_in, float a1_out,
 // 	float a2_out, float a3_out, float a4_out,
