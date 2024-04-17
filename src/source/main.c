@@ -1,44 +1,28 @@
+#include "./../headers/libraries.h"
 #include "./../headers/functions.h"
-#include "./../headers/interface.h"
-// TODO use arrows to navigate message
-const char* menuItems[] = 
-	{
-		"1. Input initial data from console",
-		"2. Load initial data from file",
-		"3. Save initial data to file",
-		"4. Calculate data", 
-		"5. Export calculation",
-		// "6. Calculate and print U_in duration with accuracy",
-		// "7. Calculate and print U_out duration with accuracy",
-		"6. Exit",
-		NULL // TODO
-	};
-const int EXIT_INDEX = 6; // TODO
+#include "./../headers/menu.h"
 
 int main()
 {	
 	// system("chcp 1251");
-	// system("pause");
-
 	clearConsole();
-	showTitleScreen();
-	system("pause");
 
 	int choice = 0, numberOfPoints = 0;
-	float inputParameterA = 0, inputParameterB = 0, inputParameterC = 0,
-		outputParameterA = 0,outputParameterB = 0, outputParameterU1 = 0,
-		outputParameterU2 = 0, timeEnd = 0,
-		*timePoints = NULL, *UInPoints = NULL, *UOutPoints = NULL;
+	float inputParameterA = 0, inputParameterB = 0,
+		inputParameterC = 0, outputParameterA = 0,
+		outputParameterB = 0, outputParameterU1 = 0,
+		outputParameterU2 = 0, *timePoints = NULL,
+		*UInPoints = NULL, *UOutPoints = NULL;
 
-	while (choice != EXIT_INDEX)
+	while (choice != EXIT_CASE)
 	{
-		choice = getUserChoiceFromMenu(menuItems);
+		choice = getUserChoiceFromMenu();
 
 		switch (choice)
 		{
-		case 1:
+			case CONSOLE_INPUT_CASE:
 			{
-				readInitialValuesFromConsole // TODO if data have errors
+				readInitialValuesFromConsole
 				(	
 					&numberOfPoints, &inputParameterA,
 					&inputParameterB, &inputParameterC,
@@ -46,10 +30,7 @@ int main()
 					&outputParameterU1, &outputParameterU2
 				);
 
-				clearConsole();
-				printf("Initial data:\n\n");
-
-				printInitialValuesToConsole // TODO if data have errors
+				printInitialValuesToConsole
 				(	
 					numberOfPoints, inputParameterA,
 					inputParameterB, inputParameterC,
@@ -57,23 +38,20 @@ int main()
 					outputParameterU1, outputParameterU2
 				);
 
-				system("pause");
 				break;
 			}
-		case 2:
+			case FILE_INPUT_CASE:
 			{
-				loadInitialDataFromFile // TODO if file has no values
+				loadInitialDataFromFile
 				(
-					"./../data/initial_data.txt", &numberOfPoints, &inputParameterA,
+					INITIAL_DATA_IMPORT_LOCATION,
+					&numberOfPoints, &inputParameterA,
 					&inputParameterB, &inputParameterC,
 					&outputParameterA, &outputParameterB,
 					&outputParameterU1, &outputParameterU2
 				);
 
-				clearConsole();
-				printf("Initial data:\n\n");
-
-				printInitialValuesToConsole // TODO if data have errors
+				printInitialValuesToConsole
 				(	
 					numberOfPoints, inputParameterA,
 					inputParameterB, inputParameterC,
@@ -81,39 +59,30 @@ int main()
 					outputParameterU1, outputParameterU2
 				);
 
-				system("pause");
 				break;
 			}
-		case 3:
+			case SAVE_INPUT_CASE:
 			{
-				saveInitialDataToFile // TODO if data have errors
-				(	// TODO export to special folder
-					"./../data/initial.txt", numberOfPoints, inputParameterA,
-					inputParameterB, inputParameterC,
-					outputParameterA, outputParameterB,
-					outputParameterU1, outputParameterU2
-				);
-
-				system("pause");
-				break;
-			}
-		case 4:
-			{	
-				printInitialValuesToConsole // TODO if data have errors
+				exportInitialDataToFile
 				(	
+					INITIAL_DATA_EXPORT_LOCATION,
 					numberOfPoints, inputParameterA,
 					inputParameterB, inputParameterC,
 					outputParameterA, outputParameterB,
 					outputParameterU1, outputParameterU2
 				);
 
-				// TODO
-				// if (time != NULL || U_in != NULL || U_out != NULL)
-				// {
-				// 	free(time);
-				// 	free(U_in);
-				// 	free(U_out);
-				// }
+				break;
+			}
+			case CALCULATE_DATA_CASE:
+			{	
+				printInitialValuesToConsole
+				(	
+					numberOfPoints, inputParameterA,
+					inputParameterB, inputParameterC,
+					outputParameterA, outputParameterB,
+					outputParameterU1, outputParameterU2
+				);
 
 				timePoints = (float*)calloc(numberOfPoints, sizeof(float));
 				UInPoints = (float*)calloc(numberOfPoints, sizeof(float));
@@ -123,78 +92,76 @@ int main()
 
 				calculateUInPoints
 				(
-					numberOfPoints, 
-					inputParameterA,
-					inputParameterB,
-					inputParameterC, 
-					timePoints,
-					UInPoints
+					numberOfPoints,	inputParameterA,
+					inputParameterB, inputParameterC, 
+					timePoints, UInPoints
 				);
 
 				calculateUOutPoints
 				(
-					numberOfPoints,
-					outputParameterA,
-					outputParameterB,
-					outputParameterU1, 
-					outputParameterU2,
-					UInPoints,
+					numberOfPoints,	outputParameterA,
+					outputParameterB, outputParameterU1, 
+					outputParameterU2,	UInPoints,
 					UOutPoints
 				);
 
 				printCalculationToConsole
 				(
-					numberOfPoints,
-					timePoints,
-					UInPoints,
-					UOutPoints
+					numberOfPoints, timePoints,
+					UInPoints, UOutPoints
 				);
 
-				system("pause");
 				break;
 			}
-		case 5:
-		{
-			// TODO
-			// if (time == NULL || U_in == NULL || U_out == NULL)
-			// {
-			// 	printf("\nerror! no data to save please create that first\n");
-			// 	system("pause");
-			// 	break;
-			// }
-			exportPointsDataToFile("data/U_in.txt", numberOfPoints, timePoints, UInPoints);
-			exportPointsDataToFile("data/U_out.txt", numberOfPoints, timePoints, UOutPoints);
-			system("pause");
-			break;
-		}
-		// case 6:
-		// {
-		// 	accurancy(N, U, a_in, a1_out,
-		// 		a2_out, a3_out, a4_out,
-		// 		b1_out, b2_out, b3_out,
-		// 		b4_out, U_in1, U_in2, U_in3, 1);
-		// 	system("pause");
-		// 	break;
-		// }
-		// case 7:
-		// {
-		// 	accurancy(N, U, a_in, a1_out,
-		// 		a2_out, a3_out, a4_out,
-		// 		b1_out, b2_out, b3_out,
-		// 		b4_out, U_in1, U_in2, U_in3, 0);
-		// 	system("pause");
-		// 	break;
-		// }
-		case 6:
-		{	
-			free(timePoints);
-			free(UInPoints);
-			free(UOutPoints);
+			case EXPORT_CALCULATION_CASE:
+			{
+				if (timePoints == NULL || UInPoints == NULL || UOutPoints == NULL)
+				{
+					printf("\nerror! no data to save please create that first\n");
+					system("pause");
+					break;
+				}
 
-			printf("exit...");
+				//TODO create file if not exist
+				exportPointsDataToFile
+				(
+					U_IN_POINTS_EXPORT_LOCATION,
+					numberOfPoints,	timePoints, UInPoints
+				);
 
-			return 0;
+				exportPointsDataToFile
+				(
+					U_OUT_POINTS_EXPORT_LOCATION,
+					numberOfPoints,	timePoints, UOutPoints
+				);
+				
+				break;
+			}
+			case CALCULATE_WITH_ACCURACY_CASE:
+			{
+				calculateParameterWithGivenAccuracy
+				(
+					numberOfPoints, inputParameterA,
+					inputParameterB, inputParameterC,
+					outputParameterA, outputParameterB,
+					outputParameterU1, outputParameterU2
+				);
+
+				break;
+			}
+			case EXIT_CASE:
+			{	
+				free(timePoints);
+				free(UInPoints);
+				free(UOutPoints);
+
+				printf("\nexit...\n");
+
+				return 0;
+			}
 		}
-		}
+		system("pause");
 	}
+
+	return 1;
 }
