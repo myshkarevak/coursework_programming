@@ -3,13 +3,15 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #define INITIAL_DATA_IMPORT_LOCATION \
-"src/data/initial_data.txt"
+"../src/data/initial_data.txt"
 #define INITIAL_DATA_EXPORT_LOCATION \
-"export/initial_data.txt"
+"../export/initial_data.txt"
+#define TIME_POINTS_EXPORT_LOCATION \
+"../export/time.txt"
 #define U_IN_POINTS_EXPORT_LOCATION \
-"export/U_in.txt"
+"../export/U_in.txt"
 #define U_OUT_POINTS_EXPORT_LOCATION \
-"export/U_out.txt"
+"../export/U_out.txt"
 
 #define TIME_START 5
 #define TIME_BREAKPOINT_1 10
@@ -83,7 +85,7 @@ void printCalculationToConsole
 void exportPointsDataToFile
 (
 	const char *filePath, int numberOfPoints,
-	float timePoints[], float pointsData[]
+	float pointsData[]
 );
 
 void calculateParameterWithGivenAccuracy

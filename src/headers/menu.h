@@ -14,7 +14,6 @@
 #define CALCULATE_WITH_ACCURACY_CASE 6
 #define EXIT_CASE 7
 
-void showTitleScreen();
 int getUserChoiceFromMenu();
 
 #endif

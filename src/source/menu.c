@@ -2,7 +2,6 @@
 #include "./../headers/functions.h"
 #include "./../headers/menu.h"
 
-// TODO use arrows to navigate message
 const char* menuItems[] = 
 	{
 		"1. Input initial data from console",
@@ -11,22 +10,8 @@ const char* menuItems[] =
 		"4. Calculate data", 
 		"5. Export calculation",
 		"6. Calculate parameters with given accuracy",
-		"7. Exit",
-		NULL // TODO
+		"7. Exit"
 	};
-
-void showTitleScreen()
-{
-	FILE *titleFile = fopen("..\\src\\data\\zast.txt", "r");
-	char symbol;
-	while (!feof(titleFile))
-	{
-		fscanf(titleFile, "%c", &symbol);
-		printf("%c", symbol);
-	}
-	printf("\n");
-	fclose(titleFile);
-}
 
 int getPressedKeyCode()
 {
@@ -37,18 +22,15 @@ int getPressedKeyCode()
 	#endif
 }
 
-int calculateMenuSize(const char *menuItems[])
+int calculateMenuSize()
 {
-	int index = 0;
-	while (menuItems[index] != NULL)
-	{
-		index++;
-	}
-	return index;
+	return sizeof(menuItems) / sizeof(menuItems[0]);
 }
 
-void drawMenu(const char *menuItems[], int menuSize, int currentMenuItemIndex)
+void drawArrowMenu(const char *menuItems[], int menuSize, int currentMenuItemIndex)
 {
+	printf("Use ARROW_UP and ARROW_DOWN to navigate,\nENTER to confirm\n\n");
+
 	for (int i = 0; i < menuSize; i++)
 	{
 		if (currentMenuItemIndex == i + 1)
@@ -63,9 +45,9 @@ void drawMenu(const char *menuItems[], int menuSize, int currentMenuItemIndex)
 	}
 }
 
-int getUserChoiceFromMenu()
+int arrowMenuHandler()
 {
-	const int MENU_SIZE = calculateMenuSize(menuItems);
+	const int MENU_SIZE = calculateMenuSize();
 	const int LAST_ACTIVE_INDEX = MENU_SIZE;
 
 	int currentMenuItemIndex = FIRST_ACTIVE_INDEX;
@@ -74,7 +56,7 @@ int getUserChoiceFromMenu()
 	while (pressedKey != ENTER_KEY)
 	{
 		clearConsole();
-		drawMenu(menuItems, MENU_SIZE, currentMenuItemIndex);
+		drawArrowMenu(menuItems, MENU_SIZE, currentMenuItemIndex);
 		pressedKey = getPressedKeyCode();
 
 		switch (pressedKey)
@@ -106,4 +88,13 @@ int getUserChoiceFromMenu()
 	clearConsole();
 
 	return currentMenuItemIndex;
+}
+
+int getUserChoiceFromMenu()
+{
+	#ifdef _WIN32
+		return arrowMenuHandler();
+	#else
+		return 1
+	#endif
 }
