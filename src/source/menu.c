@@ -27,7 +27,7 @@ int calculateMenuSize()
 	return sizeof(menuItems) / sizeof(menuItems[0]);
 }
 
-void drawMenu(const char *menuItems[], int menuSize, int currentMenuItemIndex)
+void drawArrowMenu(const char *menuItems[], int menuSize, int currentMenuItemIndex)
 {
 	printf("Use ARROW_UP and ARROW_DOWN to navigate,\nENTER to confirm\n\n");
 
@@ -45,7 +45,7 @@ void drawMenu(const char *menuItems[], int menuSize, int currentMenuItemIndex)
 	}
 }
 
-int getUserChoiceFromMenu()
+int arrowMenuHandler()
 {
 	const int MENU_SIZE = calculateMenuSize();
 	const int LAST_ACTIVE_INDEX = MENU_SIZE;
@@ -56,7 +56,7 @@ int getUserChoiceFromMenu()
 	while (pressedKey != ENTER_KEY)
 	{
 		clearConsole();
-		drawMenu(menuItems, MENU_SIZE, currentMenuItemIndex);
+		drawArrowMenu(menuItems, MENU_SIZE, currentMenuItemIndex);
 		pressedKey = getPressedKeyCode();
 
 		switch (pressedKey)
@@ -88,4 +88,13 @@ int getUserChoiceFromMenu()
 	clearConsole();
 
 	return currentMenuItemIndex;
+}
+
+int getUserChoiceFromMenu()
+{
+	#ifdef _WIN32
+		return arrowMenuHandler();
+	#else
+		return 1
+	#endif
 }
