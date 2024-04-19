@@ -19,15 +19,16 @@ void readInitialValuesFromConsole
 	float *outputParameterU1, float *outputParameterU2
 )
 {
-	clearConsole();
+	printf("Please, input the Initial data:\n\n");
 	printf("Points: "); scanf("%d", numberOfPoints);
-	printf("Parameter A for U_in: ");   scanf("%f", inputParameterA);
-	printf("Parameter B for U_in: ");   scanf("%f", inputParameterB);
+	printf("Parameter A for U_in: "); scanf("%f", inputParameterA);
+	printf("Parameter B for U_in: "); scanf("%f", inputParameterB);
 	printf("Parameter C for U_in: "); scanf("%f", inputParameterC);
 	printf("Parameter A for U_out: "); scanf("%f", outputParameterA);
 	printf("Parameter B for U_out: "); scanf("%f", outputParameterB);
 	printf("Parameter U1 for U_out: "); scanf("%f", outputParameterU1);
 	printf("Parameter U2 for U_out: "); scanf("%f", outputParameterU2);
+	printf("\nInput completed\n\n");
 }
 
 void printInitialValuesToConsole
@@ -40,14 +41,21 @@ void printInitialValuesToConsole
 {
 	clearConsole();
 	printf("Initial data:\n\n");
-	printf("Points: %d\n", numberOfPoints);
-	printf("Parameter A for U_in: %f\n", inputParameterA);
-	printf("Parameter B for U_in: %f\n", inputParameterB);
-	printf("Parameter C for U_in: %f\n", inputParameterC);
-	printf("Parameter A for U_out: %f\n", outputParameterA);
-	printf("Parameter B for U_out: %f\n", outputParameterB);
-	printf("Parameter U1 for U_out: %f\n", outputParameterU1);
-	printf("Parameter U2 for U_out: %f\n", outputParameterU2);
+	printf
+	(
+		"[\t%s\t][\t%s\t]\n",
+		"Parameter",
+		"Value"
+	);
+	printf("|\tPoints  \t||\t%d\t|\n", numberOfPoints);
+	printf("|\tA for U_in\t||\t%.3f\t|\n", inputParameterA);
+	printf("|\tB for U_in\t||\t%.3f\t|\n", inputParameterB);
+	printf("|\tC for U_in\t||\t%.3f\t|\n", inputParameterC);
+	printf("|\tA for U_out\t||\t%.3f\t|\n", outputParameterA);
+	printf("|\tB for U_out\t||\t%.3f\t|\n", outputParameterB);
+	printf("|\tU1 for U_out\t||\t%.3f\t|\n", outputParameterU1);
+	printf("|\tU2 for U_out\t||\t%.3f\t|\n", outputParameterU2);
+	printf("\n");
 }
 
 void exportInitialDataToFile
@@ -59,8 +67,8 @@ void exportInitialDataToFile
 	float outputParameterU2
 )
 {
-	// FILE* data = fopen("src\\data\\data.txt", "w");
 	clearConsole();
+	printf("Export to [%s] started...\n", filePath);
 	FILE* outputFile = fopen(filePath, "w");
 
 	fprintf(outputFile, "Points: %d\n", numberOfPoints);
@@ -73,6 +81,7 @@ void exportInitialDataToFile
 	fprintf(outputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);
 
 	fclose(outputFile);
+	printf("Export finished\n\n");
 }
 
 void loadInitialDataFromFile
@@ -84,8 +93,8 @@ void loadInitialDataFromFile
 	float *outputParameterU2
 )
 {
-	// FILE* outputFile = fopen("src\\data\\data.txt", "r");
 	clearConsole();
+	printf("Reading data from file...\n");
 	FILE* inputFile = fopen(filePath, "r");
 
 	fscanf(inputFile, "Points: %d\n", numberOfPoints);
@@ -98,11 +107,12 @@ void loadInitialDataFromFile
 	fscanf(inputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);
 
 	fclose(inputFile);
+	printf("Data read successfully\n\n");
 }
 
 void calculateTimePoints(float timePoints[], int numberOfPoints)
 {
-   float step = (TIME_END - TIME_START) / (numberOfPoints - 1);
+	float step = (float)(TIME_END - TIME_START) / (numberOfPoints - 1);
 
 	for (int i = 0; i < numberOfPoints; i++)
 	{
@@ -181,6 +191,7 @@ void calculateUOutPoints
 		// {
 		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
 		// }
+
 		UOutPoints[i] =
 			outputParameterA * UInPoints[i] + outputParameterB;
 	}
@@ -192,35 +203,46 @@ void printCalculationToConsole
 	float UInPoints[], float UOutPoints[]
 )
 {	
-	printf("Point\t|\tTime\t|\tU_in\t|\tU_out\t|\n");
+	printf("Calculation:\n\n");
+	printf
+	(
+		"[\t%s\t][\t%8s\t][\t%8s\t][\t%8s\t]\n",
+		"N",
+		"Time",
+		"U_in",
+		"U_out"
+	);
 
 	for (int i = 0; i < numberOfPoints; i++)     
 	{
 		printf
 		(
-			"%d\t|\t%.4f\t|\t%.4f\t|\t%.4f\t|\n",
+			"|\t%d\t||\t%8.4f\t||\t%8.4f\t||\t%8.4f\t|\n",
 			i + 1,
 			timePoints[i],
 			UInPoints[i],
 			UOutPoints[i]
 		);
 	}
+	printf("\n");
 }
 
 void exportPointsDataToFile
 (
 	const char *filePath, int numberOfPoints,
-	float timePoints[], float pointsData[]
+	float pointsData[]
 )
 {
+	printf("Export to [%s] started...\n", filePath);
 	FILE* exportFile = fopen(filePath, "w");
 
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-		fprintf(exportFile, "%.4f\t%.4f\n", timePoints[i], pointsData[i]);
+		fprintf(exportFile, "%.4f\n", pointsData[i]);
 	}
 
 	fclose(exportFile);
+	printf("Export finished\n\n");
 }
 
 void calculateParameterWithGivenAccuracy

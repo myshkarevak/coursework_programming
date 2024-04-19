@@ -2,6 +2,13 @@
 #include "./../headers/functions.h"
 #include "./../headers/menu.h"
 
+// TODO
+// 4 parameters with accuracy
+// menu in batch with maxima
+// linux support c
+// sh scripts
+// title screen
+
 int main()
 {	
 	// system("chcp 1251");
@@ -17,7 +24,7 @@ int main()
 	while (choice != EXIT_CASE)
 	{
 		choice = getUserChoiceFromMenu();
-
+		clearConsole();
 		switch (choice)
 		{
 			case CONSOLE_INPUT_CASE:
@@ -29,7 +36,7 @@ int main()
 					&outputParameterA, &outputParameterB,
 					&outputParameterU1, &outputParameterU2
 				);
-
+				system("pause");
 				printInitialValuesToConsole
 				(	
 					numberOfPoints, inputParameterA,
@@ -37,7 +44,6 @@ int main()
 					outputParameterA, outputParameterB,
 					outputParameterU1, outputParameterU2
 				);
-
 				break;
 			}
 			case FILE_INPUT_CASE:
@@ -50,7 +56,7 @@ int main()
 					&outputParameterA, &outputParameterB,
 					&outputParameterU1, &outputParameterU2
 				);
-
+				system("pause");
 				printInitialValuesToConsole
 				(	
 					numberOfPoints, inputParameterA,
@@ -58,7 +64,6 @@ int main()
 					outputParameterA, outputParameterB,
 					outputParameterU1, outputParameterU2
 				);
-
 				break;
 			}
 			case SAVE_INPUT_CASE:
@@ -71,7 +76,6 @@ int main()
 					outputParameterA, outputParameterB,
 					outputParameterU1, outputParameterU2
 				);
-
 				break;
 			}
 			case CALCULATE_DATA_CASE:
@@ -89,14 +93,12 @@ int main()
 				UOutPoints = (float*)calloc(numberOfPoints, sizeof(float));
 
 				calculateTimePoints(timePoints, numberOfPoints);
-
 				calculateUInPoints
 				(
 					numberOfPoints,	inputParameterA,
 					inputParameterB, inputParameterC, 
 					timePoints, UInPoints
 				);
-
 				calculateUOutPoints
 				(
 					numberOfPoints,	outputParameterA,
@@ -104,13 +106,11 @@ int main()
 					outputParameterU2,	UInPoints,
 					UOutPoints
 				);
-
 				printCalculationToConsole
 				(
 					numberOfPoints, timePoints,
 					UInPoints, UOutPoints
 				);
-
 				break;
 			}
 			case EXPORT_CALCULATION_CASE:
@@ -122,19 +122,21 @@ int main()
 					break;
 				}
 
-				//TODO create file if not exist
+				exportPointsDataToFile
+				(
+					TIME_POINTS_EXPORT_LOCATION,
+					numberOfPoints,	timePoints
+				);
 				exportPointsDataToFile
 				(
 					U_IN_POINTS_EXPORT_LOCATION,
-					numberOfPoints,	timePoints, UInPoints
+					numberOfPoints, UInPoints
 				);
-
 				exportPointsDataToFile
 				(
 					U_OUT_POINTS_EXPORT_LOCATION,
-					numberOfPoints,	timePoints, UOutPoints
+					numberOfPoints, UOutPoints
 				);
-				
 				break;
 			}
 			case CALCULATE_WITH_ACCURACY_CASE:
@@ -146,7 +148,6 @@ int main()
 					outputParameterA, outputParameterB,
 					outputParameterU1, outputParameterU2
 				);
-
 				break;
 			}
 			case EXIT_CASE:
@@ -154,9 +155,6 @@ int main()
 				free(timePoints);
 				free(UInPoints);
 				free(UOutPoints);
-
-				printf("\nexit...\n");
-
 				return 0;
 			}
 		}
