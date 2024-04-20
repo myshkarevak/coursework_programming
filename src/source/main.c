@@ -1,17 +1,10 @@
 #include "./../headers/libraries.h"
 #include "./../headers/functions.h"
+#include "./../headers/dataio.h"
 #include "./../headers/menu.h"
-
-// TODO
-// 4 parameters with accuracy
-// menu in batch with maxima
-// linux support c
-// sh scripts
-// title screen
 
 int main()
 {	
-	// system("chcp 1251");
 	clearConsole();
 
 	int choice = 0, numberOfPoints = 0;
