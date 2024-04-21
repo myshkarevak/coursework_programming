@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "functions.h": "c",
-        "stdio.h": "c",
-        "menu.h": "c",
-        "dataio.h": "c",
-        "libraries.h": "c"
-    },
-}

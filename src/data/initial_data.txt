@@ -1,8 +1,0 @@
-Points: 100
-Parameter A for U_in: 20
-Parameter B for U_in: 0.5
-Parameter C for U_in: 17
-Parameter A for U_out: 2.5
-Parameter B for U_out: 10
-Parameter U1 for U_out: 10
-Parameter U2 for U_out: 30

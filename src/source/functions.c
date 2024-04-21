@@ -13,8 +13,7 @@ void calculateTimePoints(float timePoints[], int numberOfPoints)
 
 void calculateUInPoints
 (
-	int numberOfPoints, float inputParameterA, float inputParameterB,
-	float inputParameterC, float timePoints[], float UInPoints[]
+	int numberOfPoints, float timePoints[], float UInPoints[]
 )
 {
 	for (int i = 0; i < numberOfPoints; i++)
@@ -32,7 +31,7 @@ void calculateUInPoints
 			) 
 			{
 				UInPoints[i] =
-				inputParameterA * (timePoints[i] - TIME_BREAKPOINT_1);
+					PARAMETER_A_U_IN * (timePoints[i] - TIME_BREAKPOINT_1);
 			}
 			else if
 			(
@@ -40,8 +39,8 @@ void calculateUInPoints
 			)
 			{
 				UInPoints[i] =
-					(inputParameterA * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
-					- (inputParameterB * (timePoints[i] - TIME_BREAKPOINT_2));
+					(PARAMETER_A_U_IN * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
+					- (PARAMETER_B_U_IN * (timePoints[i] - TIME_BREAKPOINT_2));
 			}
 			else if
 			(
@@ -49,9 +48,9 @@ void calculateUInPoints
 			)
 			{
 				UInPoints[i] = 
-					(inputParameterA * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
-					- (inputParameterB * (TIME_BREAKPOINT_3 - TIME_BREAKPOINT_2))
-					- (inputParameterC * (timePoints[i] - TIME_BREAKPOINT_3));
+					(PARAMETER_A_U_IN * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
+					- (PARAMETER_B_U_IN * (TIME_BREAKPOINT_3 - TIME_BREAKPOINT_2))
+					- (PARAMETER_C_U_IN * (timePoints[i] - TIME_BREAKPOINT_3));
 			}
 			else
 			{
@@ -62,38 +61,32 @@ void calculateUInPoints
 
 void calculateUOutPoints
 (
-	int numberOfPoints, float outputParameterA,
-	float outputParameterB, float outputParameterU1, 
-	float outputParameterU2, float UInPoints[],
-	float UOutPoints[]
+	int numberOfPoints, float UInPoints[], float UOutPoints[]
 )
 {
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-		// if(UInPoints[i] <= outputParameterU1)
+		// if(UInPoints[i] <= PARAMETER_U1_U_OUT)
 		// {
-		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// 	UOutPoints[i] = PARAMETER_A_U_OUT * UInPoints[i] + PARAMETER_B_U_OUT;
 		// }
-		// else if (UInPoints[i] > outputParameterU1 && UInPoints[i] <= outputParameterU2)
+		// else if (UInPoints[i] > PARAMETER_U1_U_OUT && UInPoints[i] <= PARAMETER_U2_U_OUT)
 		// {
-		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// 	UOutPoints[i] = PARAMETER_A_U_OUT * UInPoints[i] + PARAMETER_B_U_OUT;
 		// } 
 		// else 
 		// {
-		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// 	UOutPoints[i] = PARAMETER_A_U_OUT * UInPoints[i] + PARAMETER_B_U_OUT;
 		// }
 
 		UOutPoints[i] =
-			outputParameterA * UInPoints[i] + outputParameterB;
+			PARAMETER_A_U_OUT * UInPoints[i] + PARAMETER_B_U_OUT;
 	}
 }
 
 void calculateParameterWithGivenAccuracy
 (
-	int numberOfPoints, float inputParameterA,
-	float inputParameterB, float inputParameterC,
- 	float outputParameterA, float outputParameterB,
- 	float outputParameterU1, float outputParameterU2
+	int numberOfPoints
 ) 
 {
 	// TODO

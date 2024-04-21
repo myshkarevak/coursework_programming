@@ -1,42 +1,31 @@
 
 #include "./../headers/libraries.h"
+#include "./../headers/functions.h"
 #include "./../headers/dataio.h"
+
+void pauseSystem()
+{
+	printf("press ENTER key to continue...\n");
+	getchar();
+}
 
 void clearConsole()
 {
-	#ifdef _WIN32
-		system("cls");
-	#else
-		system("clear");
-	#endif
+	system("clear");
 }
 
-void readInitialValuesFromConsole
-(	
-	int *numberOfPoints, float *inputParameterA,
-	float *inputParameterB, float *inputParameterC,
-	float *outputParameterA, float *outputParameterB,
-	float *outputParameterU1, float *outputParameterU2
-)
+int requestNumberOfPoints()
 {
-	printf("Please, input the Initial data:\n\n");
-	printf("Points: "); scanf("%d", numberOfPoints);
-	printf("Parameter A for U_in: "); scanf("%f", inputParameterA);
-	printf("Parameter B for U_in: "); scanf("%f", inputParameterB);
-	printf("Parameter C for U_in: "); scanf("%f", inputParameterC);
-	printf("Parameter A for U_out: "); scanf("%f", outputParameterA);
-	printf("Parameter B for U_out: "); scanf("%f", outputParameterB);
-	printf("Parameter U1 for U_out: "); scanf("%f", outputParameterU1);
-	printf("Parameter U2 for U_out: "); scanf("%f", outputParameterU2);
-	printf("\nInput completed\n\n");
+	int value;
+	printf("Number of points: ");
+	scanf("%d", &value);
+	getchar(); //remove \n from input
+	return value;
 }
 
 void printInitialValuesToConsole
 (
-	int numberOfPoints, float inputParameterA,
-	float inputParameterB, float inputParameterC,
- 	float outputParameterA, float outputParameterB,
- 	float outputParameterU1, float outputParameterU2
+	int numberOfPoints
 )
 {
 	clearConsole();
@@ -48,66 +37,14 @@ void printInitialValuesToConsole
 		"Value"
 	);
 	printf("|\tPoints  \t||\t%d\t|\n", numberOfPoints);
-	printf("|\tA for U_in\t||\t%.3f\t|\n", inputParameterA);
-	printf("|\tB for U_in\t||\t%.3f\t|\n", inputParameterB);
-	printf("|\tC for U_in\t||\t%.3f\t|\n", inputParameterC);
-	printf("|\tA for U_out\t||\t%.3f\t|\n", outputParameterA);
-	printf("|\tB for U_out\t||\t%.3f\t|\n", outputParameterB);
-	printf("|\tU1 for U_out\t||\t%.3f\t|\n", outputParameterU1);
-	printf("|\tU2 for U_out\t||\t%.3f\t|\n", outputParameterU2);
+	printf("|\tA for U_in\t||\t%d\t|\n", PARAMETER_A_U_IN);
+	printf("|\tB for U_in\t||\t%.1f\t|\n", PARAMETER_B_U_IN);
+	printf("|\tC for U_in\t||\t%d\t|\n", PARAMETER_C_U_IN);
+	printf("|\tA for U_out\t||\t%.1f\t|\n", PARAMETER_A_U_OUT);
+	printf("|\tB for U_out\t||\t%d\t|\n", PARAMETER_B_U_OUT);
+	printf("|\tU1 for U_out\t||\t%d\t|\n", PARAMETER_U1_U_OUT);
+	printf("|\tU2 for U_out\t||\t%d\t|\n", PARAMETER_U2_U_OUT);
 	printf("\n");
-}
-
-void exportInitialDataToFile
-(
-	const char *filePath, int numberOfPoints,
-	float inputParameterA, float inputParameterB,
-	float inputParameterC,float outputParameterA,
-	float outputParameterB, float outputParameterU1,
-	float outputParameterU2
-)
-{
-	clearConsole();
-	printf("Export to [%s] started...\n", filePath);
-	FILE* outputFile = fopen(filePath, "w");
-
-	fprintf(outputFile, "Points: %d\n", numberOfPoints);
-	fprintf(outputFile, "Parameter A for U_in: %f\n", inputParameterA);
-	fprintf(outputFile, "Parameter B for U_in: %f\n", inputParameterB);
-	fprintf(outputFile, "Parameter C for U_in: %f\n", inputParameterC);
-	fprintf(outputFile, "Parameter A for U_out: %f\n", outputParameterA);
-	fprintf(outputFile, "Parameter B for U_out: %f\n", outputParameterB);
-	fprintf(outputFile, "Parameter U1 for U_out: %f\n", outputParameterU1);
-	fprintf(outputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);
-
-	fclose(outputFile);
-	printf("Export finished\n\n");
-}
-
-void loadInitialDataFromFile
-(
-	const char* filePath, int *numberOfPoints,
-	float *inputParameterA, float *inputParameterB,
-	float *inputParameterC,	float *outputParameterA,
-	float *outputParameterB, float *outputParameterU1,
-	float *outputParameterU2
-)
-{
-	clearConsole();
-	printf("Reading data from file...\n");
-	FILE* inputFile = fopen(filePath, "r");
-
-	fscanf(inputFile, "Points: %d\n", numberOfPoints);
-	fscanf(inputFile, "Parameter A for U_in: %f\n", inputParameterA);
-	fscanf(inputFile, "Parameter B for U_in: %f\n", inputParameterB);
-	fscanf(inputFile, "Parameter C for U_in: %f\n", inputParameterC);
-	fscanf(inputFile, "Parameter A for U_out: %f\n", outputParameterA);
-	fscanf(inputFile, "Parameter B for U_out: %f\n", outputParameterB);
-	fscanf(inputFile, "Parameter U1 for U_out: %f\n", outputParameterU1);
-	fscanf(inputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);
-
-	fclose(inputFile);
-	printf("Data read successfully\n\n");
 }
 
 void printCalculationToConsole
