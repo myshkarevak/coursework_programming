@@ -94,3 +94,19 @@ void exportPointsDataToFile
 	fclose(exportFile);
 	printf("Export finished\n\n");
 }
+
+void printAccuracyCalculationTableHeader
+(
+
+)
+{
+
+}
+
+void printAccuracyCalculationTableRow
+(
+
+)
+{
+	
+}

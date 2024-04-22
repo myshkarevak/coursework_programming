@@ -16,6 +16,11 @@
 #define PARAMETER_U1_U_OUT 10
 #define PARAMETER_U2_U_OUT 30
 
+typedef float (*ParameterFunction)
+(
+	int, float[], float[], float[]
+);
+
 void calculateTimePoints
 (
 	float timePoints[], int numberOfPoints
@@ -31,7 +36,7 @@ void calculateUOutPoints
 	int numberOfPoints, float UInPoints[], float UOutPoints[]
 );
 
-void calculateParameterWithGivenAccuracy
+void calculateParametersWithGivenAccuracy
 (
 	int numberOfPoints
 );

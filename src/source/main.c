@@ -29,9 +29,9 @@ int main()
 	);
 	exportPointsDataToFile
 	(
-		U_OUT_POINTS_EXPORT_LOCATION,numberOfPoints, UOutPoints
+		U_OUT_POINTS_EXPORT_LOCATION, numberOfPoints, UOutPoints
 	);
-	calculateParameterWithGivenAccuracy(numberOfPoints);
+	calculateParametersWithGivenAccuracy(numberOfPoints);
 
 	free(timePoints);
 	free(UInPoints);
