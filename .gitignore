@@ -1,5 +1,9 @@
 *.exe
 *.o
+time.txt
+U_in.txt
+U_out.txt
+/.vscode
 /export
 /build
 /app

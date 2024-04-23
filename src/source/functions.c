@@ -1,114 +1,6 @@
 #include "./../headers/libraries.h"
 #include "./../headers/functions.h"
-#include "./../headers/menu.h"
-
-void clearConsole()
-{
-	#ifdef _WIN32
-		system("cls");
-	#else
-		system("clear");
-	#endif
-}
-
-void readInitialValuesFromConsole
-(	
-	int *numberOfPoints, float *inputParameterA,
-	float *inputParameterB, float *inputParameterC,
-	float *outputParameterA, float *outputParameterB,
-	float *outputParameterU1, float *outputParameterU2
-)
-{
-	printf("Please, input the Initial data:\n\n");
-	printf("Points: "); scanf("%d", numberOfPoints);
-	printf("Parameter A for U_in: "); scanf("%f", inputParameterA);
-	printf("Parameter B for U_in: "); scanf("%f", inputParameterB);
-	printf("Parameter C for U_in: "); scanf("%f", inputParameterC);
-	printf("Parameter A for U_out: "); scanf("%f", outputParameterA);
-	printf("Parameter B for U_out: "); scanf("%f", outputParameterB);
-	printf("Parameter U1 for U_out: "); scanf("%f", outputParameterU1);
-	printf("Parameter U2 for U_out: "); scanf("%f", outputParameterU2);
-	printf("\nInput completed\n\n");
-}
-
-void printInitialValuesToConsole
-(
-	int numberOfPoints, float inputParameterA,
-	float inputParameterB, float inputParameterC,
- 	float outputParameterA, float outputParameterB,
- 	float outputParameterU1, float outputParameterU2
-)
-{
-	clearConsole();
-	printf("Initial data:\n\n");
-	printf
-	(
-		"[\t%s\t][\t%s\t]\n",
-		"Parameter",
-		"Value"
-	);
-	printf("|\tPoints  \t||\t%d\t|\n", numberOfPoints);
-	printf("|\tA for U_in\t||\t%.3f\t|\n", inputParameterA);
-	printf("|\tB for U_in\t||\t%.3f\t|\n", inputParameterB);
-	printf("|\tC for U_in\t||\t%.3f\t|\n", inputParameterC);
-	printf("|\tA for U_out\t||\t%.3f\t|\n", outputParameterA);
-	printf("|\tB for U_out\t||\t%.3f\t|\n", outputParameterB);
-	printf("|\tU1 for U_out\t||\t%.3f\t|\n", outputParameterU1);
-	printf("|\tU2 for U_out\t||\t%.3f\t|\n", outputParameterU2);
-	printf("\n");
-}
-
-void exportInitialDataToFile
-(
-	const char *filePath, int numberOfPoints,
-	float inputParameterA, float inputParameterB,
-	float inputParameterC,float outputParameterA,
-	float outputParameterB, float outputParameterU1,
-	float outputParameterU2
-)
-{
-	clearConsole();
-	printf("Export to [%s] started...\n", filePath);
-	FILE* outputFile = fopen(filePath, "w");
-
-	fprintf(outputFile, "Points: %d\n", numberOfPoints);
-	fprintf(outputFile, "Parameter A for U_in: %f\n", inputParameterA);
-	fprintf(outputFile, "Parameter B for U_in: %f\n", inputParameterB);
-	fprintf(outputFile, "Parameter C for U_in: %f\n", inputParameterC);
-	fprintf(outputFile, "Parameter A for U_out: %f\n", outputParameterA);
-	fprintf(outputFile, "Parameter B for U_out: %f\n", outputParameterB);
-	fprintf(outputFile, "Parameter U1 for U_out: %f\n", outputParameterU1);
-	fprintf(outputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);
-
-	fclose(outputFile);
-	printf("Export finished\n\n");
-}
-
-void loadInitialDataFromFile
-(
-	const char* filePath, int *numberOfPoints,
-	float *inputParameterA, float *inputParameterB,
-	float *inputParameterC,	float *outputParameterA,
-	float *outputParameterB, float *outputParameterU1,
-	float *outputParameterU2
-)
-{
-	clearConsole();
-	printf("Reading data from file...\n");
-	FILE* inputFile = fopen(filePath, "r");
-
-	fscanf(inputFile, "Points: %d\n", numberOfPoints);
-	fscanf(inputFile, "Parameter A for U_in: %f\n", inputParameterA);
-	fscanf(inputFile, "Parameter B for U_in: %f\n", inputParameterB);
-	fscanf(inputFile, "Parameter C for U_in: %f\n", inputParameterC);
-	fscanf(inputFile, "Parameter A for U_out: %f\n", outputParameterA);
-	fscanf(inputFile, "Parameter B for U_out: %f\n", outputParameterB);
-	fscanf(inputFile, "Parameter U1 for U_out: %f\n", outputParameterU1);
-	fscanf(inputFile, "Parameter U2 for U_out: %f\n", outputParameterU2);
-
-	fclose(inputFile);
-	printf("Data read successfully\n\n");
-}
+#include "./../headers/dataio.h"
 
 void calculateTimePoints(float timePoints[], int numberOfPoints)
 {
@@ -122,240 +14,363 @@ void calculateTimePoints(float timePoints[], int numberOfPoints)
 
 void calculateUInPoints
 (
-	int numberOfPoints, float inputParameterA, float inputParameterB,
-	float inputParameterC, float timePoints[], float UInPoints[]
+	int numberOfPoints, float timePoints[], float UInPoints[]
 )
 {
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-			if
-			(
-				timePoints[i] <= TIME_BREAKPOINT_1
-			) 
-			{
-				UInPoints[i] = 0;
-			}
-			else if 
-			(
-				timePoints[i] > TIME_BREAKPOINT_1 && timePoints[i] < TIME_BREAKPOINT_2
-			) 
-			{
-				UInPoints[i] =
-				inputParameterA * (timePoints[i] - TIME_BREAKPOINT_1);
-			}
-			else if
-			(
-				timePoints[i] > TIME_BREAKPOINT_2 && timePoints[i] < TIME_BREAKPOINT_3
-			)
-			{
-				UInPoints[i] =
-					(inputParameterA * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
-					- (inputParameterB * (timePoints[i] - TIME_BREAKPOINT_2));
-			}
-			else if
-			(
-				timePoints[i] > TIME_BREAKPOINT_3 && timePoints[i] < TIME_BREAKPOINT_4
-			)
-			{
-				UInPoints[i] = 
-					(inputParameterA * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
-					- (inputParameterB * (TIME_BREAKPOINT_3 - TIME_BREAKPOINT_2))
-					- (inputParameterC * (timePoints[i] - TIME_BREAKPOINT_3));
-			}
-			else
-			{
-				UInPoints[i] = 0;
-			}
+		if (timePoints[i] <= TIME_BREAKPOINT_1) 
+		{
+			UInPoints[i] = 0;
+		}
+		else if 
+		(
+			timePoints[i] > TIME_BREAKPOINT_1
+				&& timePoints[i] < TIME_BREAKPOINT_2
+		) 
+		{
+			UInPoints[i] =
+				PARAMETER_A_U_IN * (timePoints[i] - TIME_BREAKPOINT_1);
+		}
+		else if
+		(
+			timePoints[i] > TIME_BREAKPOINT_2
+				&& timePoints[i] < TIME_BREAKPOINT_3
+		)
+		{
+			UInPoints[i] =
+				(PARAMETER_A_U_IN * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
+				- (PARAMETER_B_U_IN * (timePoints[i] - TIME_BREAKPOINT_2));
+		}
+		else if
+		(
+			timePoints[i] > TIME_BREAKPOINT_3
+				&& timePoints[i] < TIME_BREAKPOINT_4
+		)
+		{
+			UInPoints[i] = 
+				(PARAMETER_A_U_IN * (TIME_BREAKPOINT_2 - TIME_BREAKPOINT_1))
+				- (PARAMETER_B_U_IN * (TIME_BREAKPOINT_3 - TIME_BREAKPOINT_2))
+				- (PARAMETER_C_U_IN * (timePoints[i] - TIME_BREAKPOINT_3));
+		}
+		else
+		{
+			UInPoints[i] = 0;
+		}
 	}
 }
 
 void calculateUOutPoints
 (
-	int numberOfPoints, float outputParameterA,
-	float outputParameterB, float outputParameterU1, 
-	float outputParameterU2, float UInPoints[],
-	float UOutPoints[]
+	int numberOfPoints, float UInPoints[], float UOutPoints[]
 )
 {
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-		// if(UInPoints[i] <= outputParameterU1)
+		// if (UInPoints[i] <= PARAMETER_U1_U_OUT)
 		// {
-		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// 		UOutPoints[i] =
+		//			PARAMETER_A_U_OUT * UInPoints[i] + PARAMETER_B_U_OUT;
 		// }
-		// else if (UInPoints[i] > outputParameterU1 && UInPoints[i] <= outputParameterU2)
+		// else if 
+		// (
+		// 		UInPoints[i] > PARAMETER_U1_U_OUT
+		//			&& UInPoints[i] <= PARAMETER_U2_U_OUT
+		// )
 		// {
-		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// 		UOutPoints[i] =
+		//			PARAMETER_A_U_OUT * UInPoints[i] + PARAMETER_B_U_OUT;
 		// } 
 		// else 
 		// {
-		// 	UOutPoints[i] = outputParameterA * UInPoints[i] + outputParameterB;
+		// 		UOutPoints[i] =
+		// 			PARAMETER_A_U_OUT * UInPoints[i] + PARAMETER_B_U_OUT;
 		// }
 
 		UOutPoints[i] =
-			outputParameterA * UInPoints[i] + outputParameterB;
+			PARAMETER_A_U_OUT * UInPoints[i] + PARAMETER_B_U_OUT;
 	}
 }
 
-void printCalculationToConsole
+float calculateAccuracy
 (
-	int numberOfPoints, float timePoints[],
-	float UInPoints[], float UOutPoints[]
-)
-{	
-	printf("Calculation:\n\n");
-	printf
-	(
-		"[\t%s\t][\t%8s\t][\t%8s\t][\t%8s\t]\n",
-		"N",
-		"Time",
-		"U_in",
-		"U_out"
-	);
-
-	for (int i = 0; i < numberOfPoints; i++)     
-	{
-		printf
-		(
-			"|\t%d\t||\t%8.4f\t||\t%8.4f\t||\t%8.4f\t|\n",
-			i + 1,
-			timePoints[i],
-			UInPoints[i],
-			UOutPoints[i]
-		);
-	}
-	printf("\n");
-}
-
-void exportPointsDataToFile
-(
-	const char *filePath, int numberOfPoints,
-	float pointsData[]
+	float initialValue,
+	float currentValue
 )
 {
-	printf("Export to [%s] started...\n", filePath);
-	FILE* exportFile = fopen(filePath, "w");
+	return fabs(initialValue - currentValue) / currentValue;
+}
+
+float calculateTimeDelta
+(
+	float time[]
+)
+{
+	return time[1] - time[0];
+}
+
+float calculateMinUValue
+(
+	int numberOfPoints,
+	float UPoints[]
+)
+{
+	float minUValue = UPoints[0];
+
+	for (int i =0; i < numberOfPoints; i++)
+	{
+		if(UPoints[i] < minUValue)
+		{
+			minUValue = UPoints[i];
+		}
+	}
+
+	return minUValue;
+}
+
+float calculateMaxUValue
+(
+	int numberOfPoints,
+	float UPoints[]
+)
+{
+	float maxUValue = UPoints[0];
 
 	for (int i = 0; i < numberOfPoints; i++)
 	{
-		fprintf(exportFile, "%.4f\n", pointsData[i]);
+		if(UPoints[i] > maxUValue)
+		{
+			maxUValue = UPoints[i];
+		}
 	}
 
-	fclose(exportFile);
-	printf("Export finished\n\n");
+	return maxUValue;
 }
 
-void calculateParameterWithGivenAccuracy
+float calculateUBoundaryValue
 (
-	int numberOfPoints, float inputParameterA,
-	float inputParameterB, float inputParameterC,
- 	float outputParameterA, float outputParameterB,
- 	float outputParameterU1, float outputParameterU2
+	const float BOUNDARY,
+	int numberOfPoints,
+	float UPoints[]
+)
+{
+	const float MAX_U = calculateMinUValue(numberOfPoints, UPoints);
+	const float MIN_U = calculateMaxUValue(numberOfPoints, UPoints);
+
+	return MIN_U + BOUNDARY * (MAX_U - MIN_U);
+}
+
+float calculateUVoltageMoment
+(
+	int numberOfPoints,
+	float time[],
+	float UPoints[]
+)
+{
+	for (int i = 0; i < numberOfPoints; i++)
+	{
+		if(UPoints[i] >= TARGET_VOLTAGE)
+		{
+			return time[i];
+		}
+	}
+	
+	return -1;
+}
+
+float calculateUMaxMoment
+(
+	int numberOfPoints,
+	float time[],
+	float UPoints[]
+)
+{
+	const float MAX_U = calculateMinUValue(numberOfPoints, UPoints);
+
+	for (int i = 0; i < numberOfPoints; i++)
+	{
+		if(UPoints[i] == MAX_U)
+		{
+			return time[i];
+		}
+	}
+
+	return -1;
+}
+
+float calculateImpulseDuration
+(
+	int numberOfPoints,
+	float time[],
+	float UPoints[]
+)
+{
+	float pulseDuration = 0;
+	const float timeDelta = calculateTimeDelta(time);
+	const float UImpulseBoundaryValue = calculateUBoundaryValue
+		(
+			IMPULSE_BOUNDARY, numberOfPoints, UPoints
+		);
+	
+	for (int i = 0; i < numberOfPoints; i++)
+	{
+		if (UPoints[i] > UImpulseBoundaryValue)
+		{
+			pulseDuration += timeDelta;
+		}
+	}
+	
+	return pulseDuration;
+}
+
+float calculateSignalLeadingEdgeDuration 
+( // similar to REAR
+	int numberOfPoints,
+	float time[],
+	float UPoints[]
+)
+{
+	float signalLeadingEdgeDuration = 0;
+	const float timeDelta = calculateTimeDelta(time);
+	const float LEADING_EDGE_START_VALUE = calculateUBoundaryValue
+		(
+			SIGNAL_EDGE_STARTING_BOUNDARY, numberOfPoints, UPoints
+		);
+	const float LEADING_EDGE_END_VALUE = calculateUBoundaryValue
+		(
+			SIGNAL_EDGE_ENDING_BOUNDARY, numberOfPoints, UPoints
+		);
+
+	for(int i = 0; i < numberOfPoints; i++)
+	{
+		if
+		(
+			UPoints[i] > LEADING_EDGE_START_VALUE
+				&& UPoints[i] > LEADING_EDGE_END_VALUE
+				&& UPoints[i+1] > UPoints[i]
+		)
+		{
+			signalLeadingEdgeDuration += timeDelta;
+		}
+	}
+
+	return signalLeadingEdgeDuration;
+}
+
+float calculateSignalRearEdgeDuration
+(
+	int numberOfPoints,
+	float time[],
+	float UPoints[]
+)
+{
+	float signalRearEdgeDuration = 0;
+	const float timeDelta = calculateTimeDelta(time);
+	const float REAR_EDGE_START_VALUE = calculateUBoundaryValue
+		(
+			SIGNAL_EDGE_STARTING_BOUNDARY, numberOfPoints, UPoints
+		);
+	const float REAR_EDGE_END_VALUE = calculateUBoundaryValue
+		(
+			SIGNAL_EDGE_ENDING_BOUNDARY, numberOfPoints, UPoints
+		);
+
+	for(int i = 0; i < numberOfPoints; i++)
+	{
+		if
+		(
+			UPoints[i] > REAR_EDGE_START_VALUE
+				&& UPoints[i] > REAR_EDGE_END_VALUE
+				&& UPoints[i+1] < UPoints[i]
+		)
+		{
+			signalRearEdgeDuration += timeDelta;
+		}
+	}
+
+	return signalRearEdgeDuration;
+}
+
+void processParameterCalculationWithGivenAccuracy
+(
+	const char* PARAMETER_NAME,
+	ParameterFunction parameterFunction,
+	int initialNumberOfPoints
+)
+{
+	const float targetAccuracy = TARGET_ACCURACY;
+	float currentAccuracy = INITIAL_ACCURACY;
+	float initialParameterValue = INITIAL_PARAMETER_VALUE;
+	float currentParameterValue = 0;
+	int numberOfPoints = initialNumberOfPoints;
+
+	printAccuracyCalculationTableHeader();
+
+	while (currentAccuracy > targetAccuracy)
+	{
+		float *timePoints = (float *)calloc(numberOfPoints, sizeof(float));
+		float *UInPoints = (float *)calloc(numberOfPoints, sizeof(float));
+		float *UOutPoints = (float *)calloc(numberOfPoints, sizeof(float));
+
+		calculateTimePoints(timePoints, numberOfPoints);
+		calculateUInPoints(numberOfPoints, timePoints, UInPoints);
+		// calculateUOutPoints(numberOfPoints, UInPoints, UOutPoints);
+
+		currentParameterValue = parameterFunction
+			(
+				numberOfPoints, timePoints,
+				UInPoints
+			);
+		currentAccuracy = calculateAccuracy
+			(
+				initialParameterValue,
+				currentParameterValue
+			);
+
+		printAccuracyCalculationTableRow();
+
+		initialParameterValue = currentParameterValue;
+		numberOfPoints *= 2;
+
+		free(timePoints);
+		free(UInPoints);
+		free(UOutPoints);
+	}
+}
+
+void calculateParametersWithGivenAccuracy
+(
+	int numberOfPoints
 ) 
 {
-	// TODO
+	processParameterCalculationWithGivenAccuracy
+	(
+		"Moment of 80V voltage",
+		calculateUVoltageMoment,
+		numberOfPoints
+	);
+	processParameterCalculationWithGivenAccuracy
+	(
+		"Moment of MAX voltage",
+		calculateUMaxMoment,
+		numberOfPoints
+	);
+	processParameterCalculationWithGivenAccuracy
+	(
+		"Impulse duration",
+		calculateImpulseDuration,
+		numberOfPoints
+	);
+	processParameterCalculationWithGivenAccuracy
+	(
+		"Leading edge duration",
+		calculateSignalLeadingEdgeDuration,
+		numberOfPoints
+	);
+	processParameterCalculationWithGivenAccuracy
+	(
+		"Rear edge duration",
+		calculateSignalRearEdgeDuration,
+		numberOfPoints
+	);
 }
-
-// float dlitelnost(int N, float U[], float dt, float U_imp)
-// {
-// 	float dlit = 0;
-// 	for (int i = 0; i < N; i++)
-// 	{
-// 		if (U[i] >= U_imp)
-// 		{
-// 			dlit += dt;
-// 		}
-// 	}
-// 	return dlit;
-// }
-
-// float outsortMax(float U_out[], int N)
-// {
-// 	int x = 0;
-// 	for (int i = 0; i < N - 1; i++)
-// 	{
-// 		if (U_out[i] < U_out[i + 1])
-// 		{
-// 			x = i + 1;
-// 		}
-// 	}
-// 	return U_out[x];
-// }
-
-// float outsortMin(float U_out[], int N)
-// {
-// 	int x = 0;
-// 	for (int i = 0; i < N - 1; i++)
-// 	{
-// 		if (U_out[i] > U_out[i + 1])
-// 		{
-// 			x = i + 1;
-// 		}
-// 	}
-// 	return U_out[x];
-// }
-
-// void accurancy(int N, float U, float a_in, float a1_out,
-// 	float a2_out, float a3_out, float a4_out,
-// 	float b1_out, float b2_out, float b3_out,
-// 	float b4_out, float U_in1, float U_in2, float U_in3, int para)
-// {
-// 	float eps;
-// 	printf("\n : ");
-// 	scanf("%f", &eps);
-
-// 	double p = 1;
-
-// 	double par = 1000000; 
-
-// 	float dlit;
-
-// 	int n = N;
-
-// 	while (p > eps)
-// 	{
-// 		float* time = NULL, * U_in = NULL, * U_out = NULL;
-// 		time = (float*)calloc(n, sizeof(float));
-// 		U_in = (float*)calloc(n, sizeof(float));
-// 		U_out = (float*)calloc(n, sizeof(float));
-// 		float dt = (2*PI - PI) / (n - 1);
-
-// 		create_time(time, n, PI, 2*PI);
-// 		create_U_in(n, a_in, U, time, U_in);
-// 		create_U_out(n, U_out, U_in1, U_in2, U_in3, a1_out,
-// 		a2_out, a3_out, a4_out, b1_out, b2_out,
-// 		b3_out, b4_out, U_in);
-
-// 		if (para == 1)
-// 		{
-// 			float Umax = outsortMax(U_in, n) ;
-// 			float Umin = outsortMin(U_in, n);
-// 			float Uimp = Umin + 0.5 * (Umax - Umin);
-// 			 dlit = dlitelnost(n, U_in, dt, Uimp);
-// 		}
-// 		else
-// 		{
-// 			float Umax = outsortMax(U_out, n);
-
-// 			float Umin = outsortMin(U_out, n);
-
-// 			float Uimp = Umin + 0.5 * (Umax - Umin);
-// 			 dlit = dlitelnost(n, U_in, dt, Uimp);
-// 		}
-		
-
-// 		p = fabs(par - dlit) / dlit;
-
-// 		printf("n = %d parametr = %f pogrechnost = %lf\n", n, dlit, p);
-
-// 		par = dlit;
-
-// 		n = 2 * n;
-
-// 		free(time);
-// 		free(U_in);
-// 		free(U_out);
-// 	}
-
-// 	system("pause");
-// }
