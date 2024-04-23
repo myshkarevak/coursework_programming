@@ -26,7 +26,7 @@ void calculateUInPoints
 		else if 
 		(
 			timePoints[i] > TIME_BREAKPOINT_1
-				&& timePoints[i] < TIME_BREAKPOINT_2
+				&& timePoints[i] <= TIME_BREAKPOINT_2
 		) 
 		{
 			UInPoints[i] =
@@ -35,7 +35,7 @@ void calculateUInPoints
 		else if
 		(
 			timePoints[i] > TIME_BREAKPOINT_2
-				&& timePoints[i] < TIME_BREAKPOINT_3
+				&& timePoints[i] <= TIME_BREAKPOINT_3
 		)
 		{
 			UInPoints[i] =
@@ -45,7 +45,7 @@ void calculateUInPoints
 		else if
 		(
 			timePoints[i] > TIME_BREAKPOINT_3
-				&& timePoints[i] < TIME_BREAKPOINT_4
+				&& timePoints[i] <= TIME_BREAKPOINT_4
 		)
 		{
 			UInPoints[i] = 
@@ -246,8 +246,8 @@ float calculateSignalLeadingEdgeDuration
 		if
 		(
 			UPoints[i] > LEADING_EDGE_START_VALUE
-				&& UPoints[i] > LEADING_EDGE_END_VALUE
-				&& UPoints[i+1] > UPoints[i]
+			&& UPoints[i] > LEADING_EDGE_END_VALUE
+			&& UPoints[i+1] > UPoints[i]
 		)
 		{
 			signalLeadingEdgeDuration += timeDelta;
@@ -280,8 +280,8 @@ float calculateSignalRearEdgeDuration
 		if
 		(
 			UPoints[i] > REAR_EDGE_START_VALUE
-				&& UPoints[i] > REAR_EDGE_END_VALUE
-				&& UPoints[i+1] < UPoints[i]
+			&& UPoints[i] > REAR_EDGE_END_VALUE
+			&& UPoints[i+1] < UPoints[i]
 		)
 		{
 			signalRearEdgeDuration += timeDelta;
@@ -298,15 +298,15 @@ void processParameterCalculationWithGivenAccuracy
 	int initialNumberOfPoints
 )
 {
-	const float targetAccuracy = TARGET_ACCURACY;
-	float currentAccuracy = INITIAL_ACCURACY;
+	const float targetError = TARGET_ACCURACY;
+	float currentError = INITIAL_ACCURACY;
 	float initialParameterValue = INITIAL_PARAMETER_VALUE;
 	float currentParameterValue = 0;
 	int numberOfPoints = initialNumberOfPoints;
 
-	printAccuracyCalculationTableHeader();
+	printAccuracyCalculationTableHeader(PARAMETER_NAME);
 
-	while (currentAccuracy > targetAccuracy)
+	while (currentError > targetError)
 	{
 		float *timePoints = (float *)calloc(numberOfPoints, sizeof(float));
 		float *UInPoints = (float *)calloc(numberOfPoints, sizeof(float));
@@ -321,13 +321,18 @@ void processParameterCalculationWithGivenAccuracy
 				numberOfPoints, timePoints,
 				UInPoints
 			);
-		currentAccuracy = calculateAccuracy
+		currentError = calculateAccuracy
 			(
 				initialParameterValue,
 				currentParameterValue
 			);
 
-		printAccuracyCalculationTableRow();
+		printAccuracyCalculationTableRow
+		(
+			numberOfPoints,
+			currentParameterValue,
+			currentError	
+		);
 
 		initialParameterValue = currentParameterValue;
 		numberOfPoints *= 2;
@@ -373,4 +378,5 @@ void calculateParametersWithGivenAccuracy
 		calculateSignalRearEdgeDuration,
 		numberOfPoints
 	);
+	printf("\n");
 }

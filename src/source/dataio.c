@@ -29,7 +29,7 @@ void printInitialValuesToConsole
 )
 {
 	clearConsole();
-	printf("Initial data:\n\n");
+	printf("Initial data:\n");
 	printf
 	(
 		"[\t%s\t][\t%s\t]\n",
@@ -53,7 +53,7 @@ void printCalculationToConsole
 	float UInPoints[], float UOutPoints[]
 )
 {	
-	printf("Calculation:\n\n");
+	printf("Calculation:\n");
 	printf
 	(
 		"[\t%s\t][\t%8s\t][\t%8s\t][\t%8s\t]\n",
@@ -92,21 +92,30 @@ void exportPointsDataToFile
 	}
 
 	fclose(exportFile);
-	printf("Export finished\n\n");
+	printf("Export finished\n");
 }
 
 void printAccuracyCalculationTableHeader
 (
-
+	const char* PARAMETER_NAME
 )
 {
-
+	printf("\n%s\n", PARAMETER_NAME);
+	printf("[\tN\t][\tValue\t][\tError\t]\n");
 }
 
 void printAccuracyCalculationTableRow
 (
-
+	const int numberOfPoints,
+	const float parameterValue,
+	const float error
 )
 {
-	
+	printf
+	(
+		"|\t%d\t||\t%.3f\t||\t%.3f\t|\n",
+		numberOfPoints,
+		parameterValue,
+		error > 1000 ? INFINITY : error
+	);
 }

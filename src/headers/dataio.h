@@ -32,8 +32,16 @@ void exportPointsDataToFile
 	float pointsData[]
 );
 
-void printAccuracyCalculationTableHeader();
+void printAccuracyCalculationTableHeader
+(
+	const char* PARAMETER_NAME
+);
 
-void printAccuracyCalculationTableRow();
+void printAccuracyCalculationTableRow
+(
+	const int numberOfPoints,
+	const float parameterValue,
+	const float error
+);
 
 #endif
