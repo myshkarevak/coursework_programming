@@ -17,19 +17,22 @@ int requestNumberOfPoints();
 
 void printInitialValuesToConsole
 (
-	int numberOfPoints
+	const int NUMBER_OF_POINTS
 );
 
 void printCalculationToConsole
 (
-	int numberOfPoints, float timePoints[],
-	float UInPoints[], float UOutPoints[]
+	int NUMBER_OF_POINTS,
+	const float TIME_POINTS[],
+	const float U_IN_POINTS[],
+	const float U_OUT_POINTS[]
 );
 
 void exportPointsDataToFile
 (
-	const char *filePath, int numberOfPoints,
-	float pointsData[]
+	const char *FILE_PATH,
+	const int NUMBER_OF_POINTS,
+	const float POINTS_DATA[]
 );
 
 void printAccuracyCalculationTableHeader
@@ -39,9 +42,9 @@ void printAccuracyCalculationTableHeader
 
 void printAccuracyCalculationTableRow
 (
-	const int numberOfPoints,
-	const float parameterValue,
-	const float error
+	const int NUMBER_OF_POINTS,
+	const float PARAMETER_VALUE,
+	const float ERROR_VALUE
 );
 
 #endif

@@ -2,22 +2,22 @@
 #include "./../headers/functions.h"
 #include "./../headers/dataio.h"
 
-void calculateTimePoints(float timePoints[], int numberOfPoints)
+void calculateTimePoints(float timePoints[], const int NUMBER_OF_POINTS)
 {
-	float step = (float)(TIME_END - TIME_START) / (numberOfPoints - 1);
+	const float STEP = (float)(TIME_END - TIME_START) / (NUMBER_OF_POINTS - 1);
 
-	for (int i = 0; i < numberOfPoints; i++)
+	for (int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
-		timePoints[i] = TIME_START + i * step;	
+		timePoints[i] = TIME_START + i * STEP;	
 	}
 }
 
 void calculateUInPoints
 (
-	int numberOfPoints, float timePoints[], float UInPoints[]
+	const int NUMBER_OF_POINTS, float timePoints[], float UInPoints[]
 )
 {
-	for (int i = 0; i < numberOfPoints; i++)
+	for (int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
 		if (timePoints[i] <= TIME_BREAKPOINT_1) 
 		{
@@ -26,7 +26,7 @@ void calculateUInPoints
 		else if 
 		(
 			timePoints[i] > TIME_BREAKPOINT_1
-				&& timePoints[i] <= TIME_BREAKPOINT_2
+			&& timePoints[i] <= TIME_BREAKPOINT_2
 		) 
 		{
 			UInPoints[i] =
@@ -35,7 +35,7 @@ void calculateUInPoints
 		else if
 		(
 			timePoints[i] > TIME_BREAKPOINT_2
-				&& timePoints[i] <= TIME_BREAKPOINT_3
+			&& timePoints[i] <= TIME_BREAKPOINT_3
 		)
 		{
 			UInPoints[i] =
@@ -45,7 +45,7 @@ void calculateUInPoints
 		else if
 		(
 			timePoints[i] > TIME_BREAKPOINT_3
-				&& timePoints[i] <= TIME_BREAKPOINT_4
+			&& timePoints[i] <= TIME_BREAKPOINT_4
 		)
 		{
 			UInPoints[i] = 
@@ -62,10 +62,10 @@ void calculateUInPoints
 
 void calculateUOutPoints
 (
-	int numberOfPoints, float UInPoints[], float UOutPoints[]
+	const int NUMBER_OF_POINTS, float UInPoints[], float UOutPoints[]
 )
 {
-	for (int i = 0; i < numberOfPoints; i++)
+	for (int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
 		// if (UInPoints[i] <= PARAMETER_U1_U_OUT)
 		// {
@@ -75,7 +75,7 @@ void calculateUOutPoints
 		// else if 
 		// (
 		// 		UInPoints[i] > PARAMETER_U1_U_OUT
-		//			&& UInPoints[i] <= PARAMETER_U2_U_OUT
+		//		&& UInPoints[i] <= PARAMETER_U2_U_OUT
 		// )
 		// {
 		// 		UOutPoints[i] =
@@ -94,34 +94,34 @@ void calculateUOutPoints
 
 float calculateAccuracy
 (
-	float initialValue,
-	float currentValue
+	const float INITIAL_VALUE,
+	const float CURRENT_VALUE
 )
 {
-	return fabs(initialValue - currentValue) / currentValue;
+	return fabs(INITIAL_VALUE - CURRENT_VALUE) / CURRENT_VALUE;
 }
 
 float calculateTimeDelta
 (
-	float time[]
+	const float TIME_POINTS[]
 )
 {
-	return time[1] - time[0];
+	return TIME_POINTS[1] - TIME_POINTS[0];
 }
 
 float calculateMinUValue
 (
-	int numberOfPoints,
-	float UPoints[]
+	const int NUMBER_OF_POINTS,
+	const float U_POINTS[]
 )
 {
-	float minUValue = UPoints[0];
+	float minUValue = U_POINTS[0];
 
-	for (int i =0; i < numberOfPoints; i++)
+	for (int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
-		if(UPoints[i] < minUValue)
+		if(U_POINTS[i] < minUValue)
 		{
-			minUValue = UPoints[i];
+			minUValue = U_POINTS[i];
 		}
 	}
 
@@ -130,17 +130,17 @@ float calculateMinUValue
 
 float calculateMaxUValue
 (
-	int numberOfPoints,
-	float UPoints[]
+	const int NUMBER_OF_POINTS,
+	const float U_POINTS[]
 )
 {
-	float maxUValue = UPoints[0];
+	float maxUValue = U_POINTS[0];
 
-	for (int i = 0; i < numberOfPoints; i++)
+	for (int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
-		if(UPoints[i] > maxUValue)
+		if(U_POINTS[i] > maxUValue)
 		{
-			maxUValue = UPoints[i];
+			maxUValue = U_POINTS[i];
 		}
 	}
 
@@ -150,28 +150,28 @@ float calculateMaxUValue
 float calculateUBoundaryValue
 (
 	const float BOUNDARY,
-	int numberOfPoints,
-	float UPoints[]
+	const int NUMBER_OF_POINTS,
+	const float U_POINTS[]
 )
 {
-	const float MAX_U = calculateMinUValue(numberOfPoints, UPoints);
-	const float MIN_U = calculateMaxUValue(numberOfPoints, UPoints);
+	const float MAX_U = calculateMinUValue(NUMBER_OF_POINTS, U_POINTS);
+	const float MIN_U = calculateMaxUValue(NUMBER_OF_POINTS, U_POINTS);
 
 	return MIN_U + BOUNDARY * (MAX_U - MIN_U);
 }
 
 float calculateUVoltageMoment
 (
-	int numberOfPoints,
-	float time[],
-	float UPoints[]
+	const int NUMBER_OF_POINTS,
+	const float TIME_POINTS[],
+	const float U_POINTS[]
 )
 {
-	for (int i = 0; i < numberOfPoints; i++)
+	for (int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
-		if(UPoints[i] >= TARGET_VOLTAGE)
+		if(U_POINTS[i] >= TARGET_VOLTAGE)
 		{
-			return time[i];
+			return TIME_POINTS[i];
 		}
 	}
 	
@@ -180,18 +180,18 @@ float calculateUVoltageMoment
 
 float calculateUMaxMoment
 (
-	int numberOfPoints,
-	float time[],
-	float UPoints[]
+	const int NUMBER_OF_POINTS,
+	const float TIME_POINTS[],
+	const float U_POINTS[]
 )
 {
-	const float MAX_U = calculateMaxUValue(numberOfPoints, UPoints);
+	const float MAX_U = calculateMaxUValue(NUMBER_OF_POINTS, U_POINTS);
 
-	for (int i = 0; i < numberOfPoints; i++)
+	for (int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
-		if(UPoints[i] == MAX_U)
+		if(U_POINTS[i] == MAX_U)
 		{
-			return time[i];
+			return TIME_POINTS[i];
 		}
 	}
 
@@ -200,23 +200,23 @@ float calculateUMaxMoment
 
 float calculateImpulseDuration
 (
-	int numberOfPoints,
-	float time[],
-	float UPoints[]
+	const int NUMBER_OF_POINTS,
+	const float TIME_POINTS[],
+	const float U_POINTS[]
 )
 {
 	float pulseDuration = 0;
-	const float timeDelta = calculateTimeDelta(time);
-	const float UImpulseBoundaryValue = calculateUBoundaryValue
+	const float TIME_DELTA = calculateTimeDelta(TIME_POINTS);
+	const float IMPULSE_BOUNDARY_VALUE = calculateUBoundaryValue
 		(
-			IMPULSE_BOUNDARY, numberOfPoints, UPoints
+			IMPULSE_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
 	
-	for (int i = 0; i < numberOfPoints; i++)
+	for (int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
-		if (UPoints[i] > UImpulseBoundaryValue)
+		if (U_POINTS[i] > IMPULSE_BOUNDARY_VALUE)
 		{
-			pulseDuration += timeDelta;
+			pulseDuration += TIME_DELTA;
 		}
 	}
 	
@@ -225,33 +225,33 @@ float calculateImpulseDuration
 
 float calculateSignalLeadingEdgeDuration 
 (
-	int numberOfPoints,
-	float time[],
-	float UPoints[]
+	const int NUMBER_OF_POINTS,
+	const float TIME_POINTS[],
+	const float U_POINTS[]
 )
 {
 	float signalLeadingEdgeDuration = 0;
-	const float timeDelta = calculateTimeDelta(time);
+	const float TIME_DELTA = calculateTimeDelta(TIME_POINTS);
 
 	const float LEADING_EDGE_END_VALUE = calculateUBoundaryValue
 		(
-			SIGNAL_EDGE_STARTING_BOUNDARY, numberOfPoints, UPoints
+			SIGNAL_EDGE_STARTING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
 	const float LEADING_EDGE_START_VALUE = calculateUBoundaryValue
 		(
-			SIGNAL_EDGE_ENDING_BOUNDARY, numberOfPoints, UPoints
+			SIGNAL_EDGE_ENDING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
 
-	for(int i = 0; i < numberOfPoints; i++)
+	for(int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
 		if
 		(
-			UPoints[i] > LEADING_EDGE_START_VALUE
-			&& UPoints[i] < LEADING_EDGE_END_VALUE
-			&& UPoints[i+1] > UPoints[i]
+			U_POINTS[i] > LEADING_EDGE_START_VALUE
+			&& U_POINTS[i] < LEADING_EDGE_END_VALUE
+			&& U_POINTS[i+1] > U_POINTS[i]
 		)
 		{
-			signalLeadingEdgeDuration += timeDelta;
+			signalLeadingEdgeDuration += TIME_DELTA;
 		}
 	}
 
@@ -260,32 +260,32 @@ float calculateSignalLeadingEdgeDuration
 
 float calculateSignalRearEdgeDuration
 (
-	int numberOfPoints,
-	float time[],
-	float UPoints[]
+	const int NUMBER_OF_POINTS,
+	const float TIME_POINTS[],
+	const float U_POINTS[]
 )
 {
 	float signalRearEdgeDuration = 0;
-	const float timeDelta = calculateTimeDelta(time);
+	const float TIME_DELTA = calculateTimeDelta(TIME_POINTS);
 	const float REAR_EDGE_START_VALUE = calculateUBoundaryValue
 		(
-			SIGNAL_EDGE_STARTING_BOUNDARY, numberOfPoints, UPoints
+			SIGNAL_EDGE_STARTING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
 	const float REAR_EDGE_END_VALUE = calculateUBoundaryValue
 		(
-			SIGNAL_EDGE_ENDING_BOUNDARY, numberOfPoints, UPoints
+			SIGNAL_EDGE_ENDING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
 
-	for(int i = 0; i < numberOfPoints; i++)
+	for(int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
 		if
 		(
-			UPoints[i] < REAR_EDGE_START_VALUE
-			&& UPoints[i] > REAR_EDGE_END_VALUE
-			&& UPoints[i+1] < UPoints[i]
+			U_POINTS[i] < REAR_EDGE_START_VALUE
+			&& U_POINTS[i] > REAR_EDGE_END_VALUE
+			&& U_POINTS[i+1] < U_POINTS[i]
 		)
 		{
-			signalRearEdgeDuration += timeDelta;
+			signalRearEdgeDuration += TIME_DELTA;
 		}
 	}
 
@@ -295,15 +295,15 @@ float calculateSignalRearEdgeDuration
 void processParameterCalculationWithGivenAccuracy
 (
 	const char* PARAMETER_NAME,
-	ParameterFunction parameterFunction,
-	int initialNumberOfPoints
+	const int INITIAL_NUMBER_OF_POINTS,
+	ParameterFunction parameterFunction
 )
 {
 	const float targetError = TARGET_ACCURACY;
 	float currentError = INITIAL_ACCURACY;
 	float initialParameterValue = INITIAL_PARAMETER_VALUE;
 	float currentParameterValue = 0;
-	int numberOfPoints = initialNumberOfPoints;
+	int numberOfPoints = INITIAL_NUMBER_OF_POINTS;
 
 	printAccuracyCalculationTableHeader(PARAMETER_NAME);
 
@@ -317,13 +317,11 @@ void processParameterCalculationWithGivenAccuracy
 
 		currentParameterValue = parameterFunction
 			(
-				numberOfPoints, timePoints,
-				UInPoints
+				numberOfPoints, timePoints,	UInPoints
 			);
 		currentError = calculateAccuracy
 			(
-				initialParameterValue,
-				currentParameterValue
+				initialParameterValue, currentParameterValue
 			);
 
 		printAccuracyCalculationTableRow
@@ -343,38 +341,38 @@ void processParameterCalculationWithGivenAccuracy
 
 void calculateParametersWithGivenAccuracy
 (
-	int numberOfPoints
+	const int INITIAL_NUMBER_OF_POINTS
 ) 
 {
 	processParameterCalculationWithGivenAccuracy
 	(
 		"Moment of 80V voltage",
-		calculateUVoltageMoment,
-		numberOfPoints
+		INITIAL_NUMBER_OF_POINTS,
+		calculateUVoltageMoment
 	);
 	processParameterCalculationWithGivenAccuracy
 	(
 		"Moment of MAX voltage",
-		calculateUMaxMoment,
-		numberOfPoints
+		INITIAL_NUMBER_OF_POINTS,
+		calculateUVoltageMoment
 	);
 	processParameterCalculationWithGivenAccuracy
 	(
 		"Impulse duration",
-		calculateImpulseDuration,
-		numberOfPoints
+		INITIAL_NUMBER_OF_POINTS,
+		calculateUVoltageMoment
 	);
 	processParameterCalculationWithGivenAccuracy
 	(
 		"Leading edge duration",
-		calculateSignalLeadingEdgeDuration,
-		numberOfPoints
+		INITIAL_NUMBER_OF_POINTS,
+		calculateUVoltageMoment
 	);
 	processParameterCalculationWithGivenAccuracy
 	(
 		"Rear edge duration",
-		calculateSignalRearEdgeDuration,
-		numberOfPoints
+		INITIAL_NUMBER_OF_POINTS,
+		calculateUVoltageMoment
 	);
 	printf("\n");
 }
