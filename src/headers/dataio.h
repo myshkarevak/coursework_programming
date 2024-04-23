@@ -32,4 +32,8 @@ void exportPointsDataToFile
 	float pointsData[]
 );
 
+void printAccuracyCalculationTableHeader();
+
+void printAccuracyCalculationTableRow();
+
 #endif

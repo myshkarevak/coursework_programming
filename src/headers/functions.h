@@ -16,9 +16,19 @@
 #define PARAMETER_U1_U_OUT 10
 #define PARAMETER_U2_U_OUT 30
 
+#define TARGET_ACCURACY 0.01
+#define INITIAL_ACCURACY 1
+#define INITIAL_PARAMETER_VALUE \
+100000000.0
+
+#define TARGET_VOLTAGE 80
+#define IMPULSE_BOUNDARY 0.5
+#define SIGNAL_EDGE_STARTING_BOUNDARY 0.1
+#define SIGNAL_EDGE_ENDING_BOUNDARY 0.9
+
 typedef float (*ParameterFunction)
 (
-	int, float[], float[], float[]
+	int, float[], float[]
 );
 
 void calculateTimePoints
