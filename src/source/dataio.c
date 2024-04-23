@@ -101,7 +101,13 @@ void printAccuracyCalculationTableHeader
 )
 {
 	printf("\n%s\n", PARAMETER_NAME);
-	printf("[\tN\t][\tValue\t][\tError\t]\n");
+	printf
+	(
+		"[\t%s\t][\t%8s\t][\t%8s\t]\n",
+		"N",
+		"Value",
+		"Error"
+	);
 }
 
 void printAccuracyCalculationTableRow
@@ -113,7 +119,7 @@ void printAccuracyCalculationTableRow
 {
 	printf
 	(
-		"|\t%d\t||\t%.3f\t||\t%.3f\t|\n",
+		"|\t%d\t||\t%8.4f\t||\t%8.4f\t|\n",
 		numberOfPoints,
 		parameterValue,
 		error > 1000 ? INFINITY : error

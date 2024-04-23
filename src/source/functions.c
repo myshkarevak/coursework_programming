@@ -185,7 +185,7 @@ float calculateUMaxMoment
 	float UPoints[]
 )
 {
-	const float MAX_U = calculateMinUValue(numberOfPoints, UPoints);
+	const float MAX_U = calculateMaxUValue(numberOfPoints, UPoints);
 
 	for (int i = 0; i < numberOfPoints; i++)
 	{
@@ -224,7 +224,7 @@ float calculateImpulseDuration
 }
 
 float calculateSignalLeadingEdgeDuration 
-( // similar to REAR
+(
 	int numberOfPoints,
 	float time[],
 	float UPoints[]
@@ -232,11 +232,12 @@ float calculateSignalLeadingEdgeDuration
 {
 	float signalLeadingEdgeDuration = 0;
 	const float timeDelta = calculateTimeDelta(time);
-	const float LEADING_EDGE_START_VALUE = calculateUBoundaryValue
+
+	const float LEADING_EDGE_END_VALUE = calculateUBoundaryValue
 		(
 			SIGNAL_EDGE_STARTING_BOUNDARY, numberOfPoints, UPoints
 		);
-	const float LEADING_EDGE_END_VALUE = calculateUBoundaryValue
+	const float LEADING_EDGE_START_VALUE = calculateUBoundaryValue
 		(
 			SIGNAL_EDGE_ENDING_BOUNDARY, numberOfPoints, UPoints
 		);
@@ -246,7 +247,7 @@ float calculateSignalLeadingEdgeDuration
 		if
 		(
 			UPoints[i] > LEADING_EDGE_START_VALUE
-			&& UPoints[i] > LEADING_EDGE_END_VALUE
+			&& UPoints[i] < LEADING_EDGE_END_VALUE
 			&& UPoints[i+1] > UPoints[i]
 		)
 		{
@@ -279,7 +280,7 @@ float calculateSignalRearEdgeDuration
 	{
 		if
 		(
-			UPoints[i] > REAR_EDGE_START_VALUE
+			UPoints[i] < REAR_EDGE_START_VALUE
 			&& UPoints[i] > REAR_EDGE_END_VALUE
 			&& UPoints[i+1] < UPoints[i]
 		)
@@ -310,11 +311,9 @@ void processParameterCalculationWithGivenAccuracy
 	{
 		float *timePoints = (float *)calloc(numberOfPoints, sizeof(float));
 		float *UInPoints = (float *)calloc(numberOfPoints, sizeof(float));
-		float *UOutPoints = (float *)calloc(numberOfPoints, sizeof(float));
 
 		calculateTimePoints(timePoints, numberOfPoints);
 		calculateUInPoints(numberOfPoints, timePoints, UInPoints);
-		// calculateUOutPoints(numberOfPoints, UInPoints, UOutPoints);
 
 		currentParameterValue = parameterFunction
 			(
@@ -339,7 +338,6 @@ void processParameterCalculationWithGivenAccuracy
 
 		free(timePoints);
 		free(UInPoints);
-		free(UOutPoints);
 	}
 }
 
