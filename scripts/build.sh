@@ -1,7 +1,7 @@
 #!/bin/bash
+echo "compiling..."
 [ -d build ] || mkdir build;
 [ -d app ] || mkdir app
-echo "compiling..."
 cd build
 rm -r -f *.o
 g++ -c ../src/source/*.c

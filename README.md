@@ -2,7 +2,7 @@
 ## Overview
 Sample text
 ## Prerequisites
-- Linux
+- Linux or WSL
 - Bash
 - WXMaxima
 - MinGW
