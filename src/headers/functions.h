@@ -28,27 +28,32 @@
 
 typedef float (*ParameterFunction)
 (
-	int, float[], float[]
+	const int, const float[], const float[]
 );
 
 void calculateTimePoints
 (
-	float timePoints[], int numberOfPoints
+	float timePoints[],
+	const int NUMBER_OF_POINTS
 );
 
 void calculateUInPoints
 (
-	int numberOfPoints, float timePoints[], float UInPoints[]
+	const int NUMBER_OF_POINTS,
+	float timePoints[],
+	float UInPoints[]
 );
 
 void calculateUOutPoints
 (
-	int numberOfPoints, float UInPoints[], float UOutPoints[]
+	const int NUMBER_OF_POINTS,
+	float UInPoints[],
+	float UOutPoints[]
 );
 
 void calculateParametersWithGivenAccuracy
 (
-	int numberOfPoints
+	const int INITIAL_NUMBER_OF_POINTS
 );
 
 #endif

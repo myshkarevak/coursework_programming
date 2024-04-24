@@ -1,1 +1,3 @@
-HELLO!
+Course work on the discipline "Programming"
+Topic "Analysis of the signal at the output of the electrical circuit"
+Student of the group IKPI_35 Myshkareva Karina Egorovna

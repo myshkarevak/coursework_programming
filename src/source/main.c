@@ -6,32 +6,32 @@ int main()
 {
 	clearConsole();
 
-	int numberOfPoints = requestNumberOfPoints();
-	float *timePoints = (float *)calloc(numberOfPoints, sizeof(float));
-	float *UInPoints = (float *)calloc(numberOfPoints, sizeof(float));
-	float *UOutPoints = (float *)calloc(numberOfPoints, sizeof(float));
+	const int NUMBER_OF_POINTS = requestNumberOfPoints();
+	float *timePoints = (float *)calloc(NUMBER_OF_POINTS, sizeof(float));
+	float *UInPoints = (float *)calloc(NUMBER_OF_POINTS, sizeof(float));
+	float *UOutPoints = (float *)calloc(NUMBER_OF_POINTS, sizeof(float));
 
-	printInitialValuesToConsole(numberOfPoints);
-	calculateTimePoints(timePoints, numberOfPoints);
-	calculateUInPoints(numberOfPoints, timePoints, UInPoints);
-	calculateUOutPoints(numberOfPoints, UInPoints, UOutPoints);
+	printInitialValuesToConsole(NUMBER_OF_POINTS);
+	calculateTimePoints(timePoints, NUMBER_OF_POINTS);
+	calculateUInPoints(NUMBER_OF_POINTS, timePoints, UInPoints);
+	calculateUOutPoints(NUMBER_OF_POINTS, UInPoints, UOutPoints);
 	printCalculationToConsole
 	(
-		numberOfPoints, timePoints, UInPoints, UOutPoints
+		NUMBER_OF_POINTS, timePoints, UInPoints, UOutPoints
 	);
 	exportPointsDataToFile
 	(
-		TIME_POINTS_EXPORT_LOCATION, numberOfPoints, timePoints
+		TIME_POINTS_EXPORT_LOCATION, NUMBER_OF_POINTS, timePoints
 	);
 	exportPointsDataToFile
 	(
-		U_IN_POINTS_EXPORT_LOCATION, numberOfPoints, UInPoints
+		U_IN_POINTS_EXPORT_LOCATION, NUMBER_OF_POINTS, UInPoints
 	);
 	exportPointsDataToFile
 	(
-		U_OUT_POINTS_EXPORT_LOCATION, numberOfPoints, UOutPoints
+		U_OUT_POINTS_EXPORT_LOCATION, NUMBER_OF_POINTS, UOutPoints
 	);
-	calculateParametersWithGivenAccuracy(numberOfPoints);
+	calculateParametersWithGivenAccuracy(NUMBER_OF_POINTS);
 
 	free(timePoints);
 	free(UInPoints);
