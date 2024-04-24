@@ -6,12 +6,13 @@ if [ ! -x app/app ]; then
     bash scripts/build.sh
 fi
 
+clear
 continueEvaluation=true
 
 WX_MAXIMA_CALCULATION_ITEM=("WXMaxima calculation" "wxmaxima scripts/calculation.wxmx")
 C_LANG_CALCULATION_ITEM=("C_LANG calculation" "./app/app")
 WX_MAXIMA_PLOTS_ITEM=("Draw plots" "wxmaxima scripts/plots.wxm")
-EXIT_ITEM=("Exit" "((continueEvaluation=false))")
+EXIT_ITEM=("Exit" "continueEvaluation=false")
 
 MENU_ITEMS=(
     WX_MAXIMA_CALCULATION_ITEM[@]
@@ -32,13 +33,26 @@ getPressedKeyCode() {
     printf "%s" "$key"
 }
 
+pauseSystem() {
+    echo $'\n'
+    echo "Press ENTER to continue..."
+    isSystemPaused=true
+    while $isSystemPaused; do
+        pressedKey=$(getPressedKeyCode)
+        case $pressedKey in
+            $ENTER_KEY)
+                isSystemPaused=false
+        esac
+    done
+}
+
 drawArrowMenu() {
     clear
     echo "Use ARROW_UP and ARROW_DOWN to navigate,"
     echo "ENTER to confirm"
     echo
     for ((i = 0; i < MENU_SIZE; i++)); do
-        if [ "$currentMenuItemIndex" = "$i" ]; then
+        if [ $currentMenuItemIndex -eq $i ]; then
             echo "-> ${!MENU_ITEMS[i]:0:1}"
         else
             echo "   ${!MENU_ITEMS[i]:0:1}"
@@ -69,4 +83,10 @@ arrowMenuHandler() {
     clear
 }
 
+printTitle() {
+    cat data/title.txt
+    pauseSystem
+}
+
+printTitle
 arrowMenuHandler
