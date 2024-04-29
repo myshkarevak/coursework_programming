@@ -154,8 +154,8 @@ float calculateUBoundaryValue
 	const float U_POINTS[]
 )
 {
-	const float MAX_U = calculateMinUValue(NUMBER_OF_POINTS, U_POINTS);
-	const float MIN_U = calculateMaxUValue(NUMBER_OF_POINTS, U_POINTS);
+	const float MIN_U = calculateMinUValue(NUMBER_OF_POINTS, U_POINTS);
+	const float MAX_U = calculateMaxUValue(NUMBER_OF_POINTS, U_POINTS);
 
 	return MIN_U + BOUNDARY * (MAX_U - MIN_U);
 }
@@ -233,14 +233,16 @@ float calculateSignalLeadingEdgeDuration
 	float signalLeadingEdgeDuration = 0;
 	const float TIME_DELTA = calculateTimeDelta(TIME_POINTS);
 
-	const float LEADING_EDGE_END_VALUE = calculateUBoundaryValue
+	const float LEADING_EDGE_START_VALUE = calculateUBoundaryValue
 		(
 			SIGNAL_EDGE_STARTING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
-	const float LEADING_EDGE_START_VALUE = calculateUBoundaryValue
+	const float LEADING_EDGE_END_VALUE = calculateUBoundaryValue
 		(
 			SIGNAL_EDGE_ENDING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
+	
+	// printf("\nLES: %f, \nLEE: %f", LEADING_EDGE_START_VALUE, LEADING_EDGE_END_VALUE);
 
 	for(int i = 0; i < NUMBER_OF_POINTS; i++)
 	{
@@ -269,11 +271,11 @@ float calculateSignalRearEdgeDuration
 	const float TIME_DELTA = calculateTimeDelta(TIME_POINTS);
 	const float REAR_EDGE_START_VALUE = calculateUBoundaryValue
 		(
-			SIGNAL_EDGE_STARTING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
+			SIGNAL_EDGE_ENDING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
 	const float REAR_EDGE_END_VALUE = calculateUBoundaryValue
 		(
-			SIGNAL_EDGE_ENDING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
+			SIGNAL_EDGE_STARTING_BOUNDARY, NUMBER_OF_POINTS, U_POINTS
 		);
 
 	for(int i = 0; i < NUMBER_OF_POINTS; i++)
@@ -354,25 +356,25 @@ void calculateParametersWithGivenAccuracy
 	(
 		"Moment of MAX voltage",
 		INITIAL_NUMBER_OF_POINTS,
-		calculateUVoltageMoment
+		calculateUMaxMoment
 	);
 	processParameterCalculationWithGivenAccuracy
 	(
 		"Impulse duration",
 		INITIAL_NUMBER_OF_POINTS,
-		calculateUVoltageMoment
+		calculateImpulseDuration
 	);
 	processParameterCalculationWithGivenAccuracy
 	(
 		"Leading edge duration",
 		INITIAL_NUMBER_OF_POINTS,
-		calculateUVoltageMoment
+		calculateSignalLeadingEdgeDuration
 	);
 	processParameterCalculationWithGivenAccuracy
 	(
 		"Rear edge duration",
 		INITIAL_NUMBER_OF_POINTS,
-		calculateUVoltageMoment
+		calculateSignalRearEdgeDuration
 	);
 	printf("\n");
 }
